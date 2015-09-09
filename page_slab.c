@@ -8,7 +8,7 @@
 
 /*
     TODO:
-    - refactor global_struct_page to global_struct_page_list
+    - refactor global_page_slab to global_page_slab_list
 */
 
 struct page_slab* alloc_page_slab()
