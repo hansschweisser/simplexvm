@@ -6,6 +6,11 @@
 #include "page.h"
 #include "debug.h"
 
+/*
+    TODO:
+    - refactor global_struct_page to global_struct_page_list
+*/
+
 struct page_slab* alloc_page_slab()
 {
     void *p;
