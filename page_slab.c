@@ -42,5 +42,25 @@ void add_page_slab(struct page_slab* new_page)
     p->next = new_page;
 }
 
+struct page* find_free_page()
+{
+    struct page_slab *p = global_page_slab;
+    struct page *page;
 
+    if( p == NULL ) 
+	return NULL;
+
+    while(1) {
+	page = p->p;    
+	for(int i=0;i<PAGE_SLAB_SIZE;++i) {
+	    if( (page+i) == NULL) {
+		return (page+i);
+	    }
+	}
+	if( p->next == NULL ) break; 
+	p = p->next;
+    }    
+    return NULL;
+    
+}
 
