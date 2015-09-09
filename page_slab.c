@@ -4,6 +4,7 @@
 
 #include "page_slab.h"
 #include "page.h"
+#include "debug.h"
 
 struct page_slab* alloc_page_slab()
 {
@@ -53,6 +54,13 @@ struct page* get_free_page_struct()
 
     while(1) {
 	page = p->p;    
+	if( p->p == NULL ) {
+	    bug();
+	    continue;
+	}
+	if( p->used == PAGE_SLAB_SIZE ) 
+	    continue;
+	
 	for(int i=0;i<PAGE_SLAB_SIZE;++i) {
 	    if( (page+i)->struct_in_use == UNUSED ) {
 		(page+i)->struct_in_use = USED;
