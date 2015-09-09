@@ -1,0 +1,5 @@
+MMU
+Instruction set
+ssh access
+commands (stop, pause, load memory from file, change memory, stats ...)
+events (memmory cell accessed, n cicles executed ...)
