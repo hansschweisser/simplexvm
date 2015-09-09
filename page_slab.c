@@ -42,7 +42,16 @@ void add_page_slab(struct page_slab* new_page)
     p->next = new_page;
 }
 
-struct page* find_free_page()
+int is_unused_page(struct page* page)
+{
+    for(int i=0;i<sizeof(struct page);++i){
+	if(  (((char*)page)+i) != 0 )
+	    return 0;
+    }
+    return 1;
+}
+
+struct page* find_free_page_struct()
 {
     struct page_slab *p = global_page_slab;
     struct page *page;
@@ -53,7 +62,7 @@ struct page* find_free_page()
     while(1) {
 	page = p->p;    
 	for(int i=0;i<PAGE_SLAB_SIZE;++i) {
-	    if( (page+i) == NULL) {
+	    if( is_unused_page(page+i) {
 		return (page+i);
 	    }
 	}
@@ -64,3 +73,11 @@ struct page* find_free_page()
     
 }
 
+struct page* new_page_struct()
+{
+    struct page* page = find_free_page();
+    if( page == NULL ) {
+    }else{
+	
+    }
+}
