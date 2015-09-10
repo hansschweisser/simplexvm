@@ -27,6 +27,10 @@ struct page_slab* alloc_page_slab()
     s->used = 0;
     s->p = p + sizeof(struct page_slab);
 
+    for(int i=0;i<PAGE_SLAB_SIZE;++i) {
+	(s->p + i)->struct_in_use = UNUSED;
+    }
+
     return s;   
 }
 
