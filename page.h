@@ -4,7 +4,7 @@
 #define UNUSED 0
 #define USED 1
 
-#define PAGE_SIZE 0x1000
+#define PAGE_SIZE 2 // two bytes shift
 
 struct page 
 {

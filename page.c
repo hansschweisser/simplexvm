@@ -11,14 +11,14 @@ struct page* new_page(vbyte begin) {
     void *p;
     struct page* page;
     
-    p = malloc(sizeof(vbyte) * PAGE_SIZE);
+    p = malloc(sizeof(vbyte) * (1<<(PAGE_SIZE*8)) );
     page = new_page_struct();
     page->p = p;
     page->next = NULL;
     page->prev = NULL;
     page->begin = begin;
     page->end = end_of_page(begin);
-    
+    return page;
 }
 
 void add_page(struct page *new_page)
@@ -78,13 +78,60 @@ int is_in(vbyte start, vbyte end, vbyte address){
 
 
 struct page* find_page(vbyte address){
+    struct page * global_page_list;
+    if( page == NULL ) 
+	return NULL;
+    while(1) {
+	if( is_in( page->begin, page->end, address) ) {
+	    return page;
+	}
+	if( page->next != NULL ) {
+	    page = page->next;
+	    continue;
+	}
+	break;
+    }
+    return NULL;
     
 }
+
+long long int tolong(vbyte address) { 
+    long long int n = 0;
+    for(int i=VBYTE_SIZE-1;i>=0;--i) {
+	n *= 256;
+	n += address.byte[i];
+    }
+    return n;
+}
+
+long long int index(vbyte begin, vbyte address) {
+    return tolong(address) - tolong(begin); 
+}
+
 
 vbyte read_vbyte(vbyte address){
+    struct page *page = find_page(address);
+    if( page == NULL ) 
+	return 0; 
+    return *( page->p + index( page->begin, address ) );
     
 }
 
-vbyte write_vbyte(vbyte address){
+vbyte page_begin(vbyte address) {
+    for(int i=0;i<PAGE_SIZE;++i) {
+	address.byte[i] = 0;
+    }
+    return address;
+}
+
+void write_vbyte(vbyte address, vbyte value){
+    struct page *page = find_page(address);
+    if( page == NULL ) {
+	page = new_page( page_begin(address) );
+	if( page == NULL ) 
+	    bug(); // cannot allocate memory
+	add_page(page);	
+    }
+    *(page->p + index(page->begin, address) ) = value;
 }
 

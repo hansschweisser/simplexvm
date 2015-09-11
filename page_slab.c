@@ -36,10 +36,10 @@ struct page_slab* alloc_page_slab()
 
 void add_page_slab(struct page_slab* new_page)
 {
-    struct page_slab *p = global_page_slab;
+    struct page_slab *p = global_page_slab_list;
     
-    if( global_page_slab == NULL ) {
-	global_page_slab = new_page;
+    if( global_page_slab_list == NULL ) {
+	global_page_slab_list = new_page;
 	new_page->next = NULL;
 	new_page->prev = NULL;
 	return;
@@ -55,7 +55,7 @@ void add_page_slab(struct page_slab* new_page)
 
 struct page* get_free_page_struct()
 {
-    struct page_slab *p = global_page_slab;
+    struct page_slab *p = global_page_slab_list;
     struct page *page;
 
     if( p == NULL ) 
