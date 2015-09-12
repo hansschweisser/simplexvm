@@ -4,7 +4,7 @@
 #define UNUSED 0
 #define USED 1
 
-#define PAGE_SIZE 2 // two bytes shift
+#define PAGE_SIZE 16 // bits shift
 
 struct page 
 {
@@ -21,6 +21,9 @@ struct page
 
 struct page *global_page_list = NULL;
 
+vbyte read_vbyte(vbyte address);
+void write_vbyte(vbyte address,vbyte value);
 
+long long int tolong(vbyte address);
 
 #endif

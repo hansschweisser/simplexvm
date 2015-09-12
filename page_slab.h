@@ -18,5 +18,6 @@ struct page_slab
 
 struct slab *global_page_slab_list = NULL; 
 
+struc slab* new_page_struct();
 
 #endif

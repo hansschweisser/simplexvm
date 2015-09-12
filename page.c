@@ -46,22 +46,11 @@ void add_page(struct page *new_page)
 }
 
 int is_eq(vbyte a, vbyte b){
-    for(int i=0;i<VBYTE_SIZE;++i){
-	if( a.byte[i] != b.byte[i] ) 
-	    return 0;
-    }
-    return 1;
+    return (a == b);
 }
 
 int is_gr(vbyte a, vbyte b){
-    for(int i=VBYTE_SIZE-1;i>=0;--i){
-	if( a.byte[i] > b.byte[i] )
-	    return 1;
-	if( a.byte[i] < b.byte[i] )
-	    return 0;
-	
-    }
-    return 0;
+    return ( a < b );
 }
 
 int is_ge(vbyte a, vbyte b){
@@ -95,33 +84,18 @@ struct page* find_page(vbyte address){
     
 }
 
-long long int tolong(vbyte address) { 
-    long long int n = 0;
-    for(int i=VBYTE_SIZE-1;i>=0;--i) {
-	n *= 256;
-	n += address.byte[i];
-    }
-    return n;
-}
-
-long long int index(vbyte begin, vbyte address) {
-    return tolong(address) - tolong(begin); 
-}
 
 
 vbyte read_vbyte(vbyte address){
     struct page *page = find_page(address);
     if( page == NULL ) 
 	return 0; 
-    return *( page->p + index( page->begin, address ) );
+    return *( page->p + ( address - page->begin ) );
     
 }
 
 vbyte page_begin(vbyte address) {
-    for(int i=0;i<PAGE_SIZE;++i) {
-	address.byte[i] = 0;
-    }
-    return address;
+    return ((address>>PAGE_SIZE)<<PAGE_SIZE);
 }
 
 void write_vbyte(vbyte address, vbyte value){
@@ -132,6 +106,6 @@ void write_vbyte(vbyte address, vbyte value){
 	    bug(); // cannot allocate memory
 	add_page(page);	
     }
-    *(page->p + index(page->begin, address) ) = value;
+    *(page->p + (address - page->begin) ) = value;
 }
 
