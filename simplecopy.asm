@@ -1,0 +1,5 @@
+	copy A B
+A:	db 0x10
+B:	db 0xff
+
+
