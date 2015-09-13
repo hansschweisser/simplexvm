@@ -5,9 +5,9 @@
 #define CMD_NOT 2
 #define CMD_OR 3
 #define CMD_AND 4
-#defien CMD_IFJMP 5
+#define CMD_IFJMP 5
 
-
+void main_loop();
 
 
 #endif

@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#define PAGE_SLAB_SIZE 1024
+#define PAGE_SLAB_SIZE 2
 
 struct page_slab
 {
@@ -16,8 +16,9 @@ struct page_slab
 };
 
 
-struct slab *global_page_slab_list = NULL; 
 
-struc slab* new_page_struct();
+struct page* new_page_struct();
+void show_page_slab_list();
+
 
 #endif

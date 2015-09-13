@@ -5,7 +5,7 @@
 #include "cpu.h"
 
 
-vbyte cmp_copy(vbyte address) {
+vbyte cmd_copy(vbyte address) {
     vbyte from = read_vbyte(address+1);
     vbyte to = read_vbyte(address+2);
     
@@ -34,9 +34,9 @@ vbyte cmd_or(vbyte address) {
     
 }
 
-vbyte cmd_adn(vbyte address) {
+vbyte cmd_and(vbyte address) {
     write_vbyte( read_vbyte(address+3) , 
-	read_value(read_value(address+1)) & read_value(read_value(address+2)) );
+	read_vbyte(read_vbyte(address+1)) & read_vbyte(read_vbyte(address+2)) );
     return address+4;
 }
 
@@ -52,6 +52,13 @@ vbyte cmd_idle(vbyte address) {
 }
 
 
+int loop = 1;
+
+vbyte cmd_exit(vbyte address){
+    loop = 0;
+    return address+1;
+}
+
 
 struct command {
     vbyte cmd;
@@ -64,12 +71,13 @@ struct command commands[] = {
     { 3, cmd_or },
     { 4, cmd_and },
     { 5, cmd_ifjmp },
-    { 6, cmd_idle }
+    { 6, cmd_idle },
+    { 7, cmd_exit }
 };
 
 
 
-vbyte execute_cmd(vbyte addres) {
+vbyte execute_cmd(vbyte address) {
     vbyte cmd = read_vbyte(address);
 
     for(int i=0;i<sizeof(commands);++i){
@@ -83,7 +91,7 @@ vbyte execute_cmd(vbyte addres) {
 void main_loop() {
     vbyte ep = 0;
 
-    while(1) { 
+    while(loop) { 
 	ep = execute_cmd(ep);
     }
 }

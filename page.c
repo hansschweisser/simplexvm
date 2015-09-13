@@ -1,17 +1,23 @@
 #include "page.h"
+#include "page_slab.h"
 #include "debug.h"
 #include "core.h"
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <inttypes.h>
 
+struct page * global_page_list = NULL;
 
 vbyte end_of_page(vbyte begin) {
-    
+    return begin + ((1<<(PAGE_SIZE))-1);
 }
 
 struct page* new_page(vbyte begin) {
     void *p;
     struct page* page;
     
-    p = malloc(sizeof(vbyte) * (1<<(PAGE_SIZE*8)) );
+    p = malloc(sizeof(vbyte) * (1<<PAGE_SIZE) );
     page = new_page_struct();
     page->p = p;
     page->next = NULL;
@@ -23,7 +29,7 @@ struct page* new_page(vbyte begin) {
 
 void add_page(struct page *new_page)
 {
-    if( new_page == NUL )
+    if( new_page == NULL )
 	bug();
 
     if( global_page_list == NULL ) {
@@ -61,13 +67,13 @@ int is_ge(vbyte a, vbyte b){
 
 
 int is_in(vbyte start, vbyte end, vbyte address){
-    if( is_ge(address,start) && is_ge(end,address) ) return 1;
+    if( ( start<=address) && (address<=end) ) return 1;
     return 0;
 }
 
 
 struct page* find_page(vbyte address){
-    struct page * global_page_list;
+    struct page * page = global_page_list;
     if( page == NULL ) 
 	return NULL;
     while(1) {
@@ -109,3 +115,56 @@ void write_vbyte(vbyte address, vbyte value){
     *(page->p + (address - page->begin) ) = value;
 }
 
+
+void show_page_list() {
+    struct page* page = global_page_list;
+
+    int count=0;
+    printf("Page list: \n");
+    while(page) {
+
+	printf ("page[%d]= %8" PRIx64 " - %8" PRIx64 " %d %p\n", count, page->begin, page->end, page->struct_in_use,page->p ); 
+
+	count ++;
+	if( page->next != NULL ) {
+	    page = page->next;
+	    continue;
+	}else{
+	    break;	
+	}
+    }
+
+}
+
+
+void show_page(struct page* page){
+    int perline = 8;
+
+
+    for(int i=0;i<(1<<PAGE_SIZE);++i){	
+	printf("%8" PRIx64 " ", *(page->p + i ) );
+	if( (i+1) % perline  == 0 ) printf("\n");
+    }
+    printf("\n");
+}
+
+void dump_all_pages() {
+    struct page* page = global_page_list;
+
+    int count=0;
+    printf("Pages dump: \n");
+    while(page) {
+
+	printf ("page[%d]= %016" PRIx64 "-%16" PRIx64 " %d %p\n", count, page->begin, page->end, page->struct_in_use,page->p ); 
+	show_page(page);
+
+	count ++;
+	if( page->next != NULL ) {
+	    page = page->next;
+	    continue;
+	}else{
+	    break;	
+	}
+    }
+    
+}

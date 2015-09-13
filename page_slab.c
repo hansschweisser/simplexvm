@@ -6,10 +6,8 @@
 #include "page.h"
 #include "debug.h"
 
-/*
-    TODO:
-    - refactor global_page_slab to global_page_slab_list
-*/
+struct page_slab* global_page_slab_list = NULL;
+
 
 struct page_slab* alloc_page_slab()
 {
@@ -65,10 +63,21 @@ struct page* get_free_page_struct()
 	page = p->p;    
 	if( p->p == NULL ) {
 	    bug();
-	    continue;
+	    if( p->next != NULL ) {
+		p = p->next; 
+		continue;
+	    }else{
+		return NULL;
+	    }
 	}
-	if( p->used == PAGE_SLAB_SIZE ) 
-	    continue;
+	if( p->used == PAGE_SLAB_SIZE ) {
+	    if( p->next != NULL ) {
+		p=p->next;
+		continue;
+	    }else{
+		return NULL;
+	    }
+	}
 	
 	for(int i=0;i<PAGE_SLAB_SIZE;++i) {
 	    if( (page+i)->struct_in_use == UNUSED ) {
@@ -77,8 +86,12 @@ struct page* get_free_page_struct()
 		return (page+i);
 	    }
 	}
-	if( p->next == NULL ) break; 
-	p = p->next;
+	if( p->next == NULL ) {
+	    p = p->next;
+	    continue;
+	}else{
+	    return NULL;
+	}
     }    
     return NULL;
     
@@ -96,3 +109,20 @@ struct page* new_page_struct()
     }
     return page;
 }
+
+
+void show_page_slab_list() {
+    struct page_slab * slab = global_page_slab_list;
+    int count = 0;
+
+//    printf("PAGE_SIZE=%d\n", PAGE_SIZE);
+    printf("[ ");
+    while( slab ) {
+	printf("slab[%d]=%d/%d ", count, slab->used, PAGE_SLAB_SIZE );
+	slab = slab->next;
+	++count;
+    }
+    printf(" ]\n");
+}
+
+
