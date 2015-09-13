@@ -1,0 +1,12 @@
+loop:	or A B C
+	and A C D
+	or B D A
+	ifjmp F A loop
+
+	
+A: 0x3
+B : 0x83
+C: 0x843
+D: 0x112
+F: 0x12111
+

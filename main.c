@@ -185,6 +185,47 @@ void vload(char *buff){
     ifsf("file", vload_file);
 }
 
+void vsave_page_to_file_index(char *buff){
+    arg1(index);
+    arg2(file);
+    if( empty(index) ) return;
+    if( empty(file) ) return;
+    int iindex = strtovbyte(index);
+
+    FILE *f = fopen( file, "w" );
+    if( f == NULL ) { printf("Cannot open file %s\n",file); return;}
+    
+    struct page* page = find_page_index(iindex);
+    if( page == NULL ) { printf("Cannot find page %i\n", iindex); return; }
+    for(int i=0;i<(1<<PAGE_SIZE); ++i) {
+	fprintf(f,"%016" PRIx64 " ", *(page->p + i ));
+    }
+    fclose(f);
+    
+
+}
+
+void vsave_page_to_file(char*buff){
+    init();
+    ifsf("index", vsave_page_to_file_index);
+}
+
+void vsave_page_to(char *buff){
+    init();
+    ifsf("file", vsave_page_to_file);
+}
+
+void vsave_page(char *buff){
+    init();
+    ifsf("to", vsave_page_to);
+}
+
+void vsave(char *buff){
+    init();
+    ifsf("page", vsave_page);
+}
+
+
 void vrun(char *buff){
     init();
     ifs("") { printf("Usage:\n\tonce\n"); return;}
@@ -218,6 +259,7 @@ int main(int argc, char **argv) {
 	ifsf("read", vread);
 	ifsf("load", vload);
 	ifsf("run", vrun);
+	ifsf("save", vsave);
 	
     }
 

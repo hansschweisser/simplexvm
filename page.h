@@ -34,4 +34,5 @@ void dump_page(struct page*);
 
 extern struct page* global_page_list;
 
+struct page * find_page_index(int);
 #endif

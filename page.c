@@ -117,6 +117,21 @@ printf("debug.write_vbyte(%016" PRIx64 ", %016" PRIx64 ")\n", address, value);
 }
 
 
+struct page * find_page_index(int index){
+    struct page * page = global_page_list;
+    int i = 0;
+    while( page ) {
+	if( i == index ) { 
+	    return page;
+	}
+	if( page->next == NULL ) return NULL;
+	i++;
+	page=page->next;
+    }
+    return NULL;
+}
+
+
 void show_page_list() {
     struct page* page = global_page_list;
 
@@ -136,6 +151,8 @@ void show_page_list() {
     }
 
 }
+
+
 
 
 void dump_page(struct page* page){
