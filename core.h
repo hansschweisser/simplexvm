@@ -9,5 +9,6 @@
 
 typedef uint64_t vbyte;
 
+void execute_cmd_once();
 
 #endif

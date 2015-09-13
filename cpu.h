@@ -9,5 +9,6 @@
 
 void main_loop();
 
+extern vbyte ep;
 
 #endif

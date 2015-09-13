@@ -29,4 +29,9 @@ void write_vbyte(vbyte address,vbyte value);
 
 void show_page_list();
 void dump_all_pages();
+void show_page(struct page*);
+void dump_page(struct page*);
+
+extern struct page* global_page_list;
+
 #endif

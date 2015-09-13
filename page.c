@@ -105,6 +105,7 @@ vbyte page_begin(vbyte address) {
 }
 
 void write_vbyte(vbyte address, vbyte value){
+printf("debug.write_vbyte(%016" PRIx64 ", %016" PRIx64 ")\n", address, value);
     struct page *page = find_page(address);
     if( page == NULL ) {
 	page = new_page( page_begin(address) );
@@ -137,9 +138,8 @@ void show_page_list() {
 }
 
 
-void show_page(struct page* page){
+void dump_page(struct page* page){
     int perline = 8;
-
 
     for(int i=0;i<(1<<PAGE_SIZE);++i){	
 	printf("%8" PRIx64 " ", *(page->p + i ) );
@@ -148,6 +148,20 @@ void show_page(struct page* page){
     printf("\n");
 }
 
+void show_page(struct page* page){
+    int perline = 8;
+
+    printf ("page[_]= %016" PRIx64 "-%016" PRIx64 " %d %p\n",  page->begin, page->end, page->struct_in_use,page->p ); 
+
+    for(int i=0;i<(1<<PAGE_SIZE);++i){	
+	printf("%8" PRIx64 " ", *(page->p + i ) );
+	if( (i+1) % perline  == 0 ) printf("\n");
+    }
+    printf("\n");
+}
+
+
+
 void dump_all_pages() {
     struct page* page = global_page_list;
 
@@ -155,8 +169,10 @@ void dump_all_pages() {
     printf("Pages dump: \n");
     while(page) {
 
-	printf ("page[%d]= %016" PRIx64 "-%16" PRIx64 " %d %p\n", count, page->begin, page->end, page->struct_in_use,page->p ); 
-	show_page(page);
+    
+        printf ("page[%d]= %016" PRIx64 "-%016" PRIx64 " %d %p\n", count,  page->begin, page->end, page->struct_in_use,page->p ); 
+
+	dump_page(page);
 
 	count ++;
 	if( page->next != NULL ) {

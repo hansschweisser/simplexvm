@@ -1,5 +1,9 @@
 #include "page.h"
-
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <inttypes.h>
+#include <stdint.h>
 
 
 #include "cpu.h"
@@ -25,11 +29,19 @@ vbyte cmd_not(vbyte address) {
 }
 
 vbyte cmd_or(vbyte address) {
+
     vbyte va = read_vbyte(read_vbyte(address+1));
     vbyte vb = read_vbyte(read_vbyte(address+2));
     vbyte to = read_vbyte(address+3);
 
-    write_vbyte(to, va | vb );
+    vbyte result = va | vb; 
+    write_vbyte(to, result );
+
+printf("debug.cmd_or  [%" PRIx64 " rv%" PRIx64 "] [%" PRIx64 " rv%" PRIx64 "] [%" PRIx64 " wv%" PRIx64 "] \n", 
+	read_vbyte(address+1), va, read_vbyte(address+2), vb, to, result ); 
+
+
+
     return address+4;
     
 }
@@ -79,20 +91,51 @@ struct command commands[] = {
 
 vbyte execute_cmd(vbyte address) {
     vbyte cmd = read_vbyte(address);
-
-    for(int i=0;i<sizeof(commands);++i){
+printf("debug.execute_cmd(%016" PRIx64 ")\n",address);
+printf("debug.execute_cmd sizeof(commands) = %d\n", (int)(sizeof(commands)/sizeof(commands[0])));
+    for(int i=0;i<sizeof(commands)/sizeof(commands[0]);++i){
+printf("debug.execute_cmd i=%d\n",i);
 	if( cmd == commands[i].cmd ) {
+printf("debug.execute_cmd executing command %016" PRIx64 "\n",cmd);
 	    return (commands[i].execute)(address);
 	}
     }
+    return address+1;
 
 }    
 
+
+
+int pausecpu = 0 ;
+int sleeptime = 0;
+int onestep = 0;
+
+void one_step() {
+    onestep = 1;
+    pausecpu = 0;
+}
+
+
+vbyte ep = 0;
+
+void execute_cmd_once() {
+    ep = execute_cmd(ep);
+}
+
+
 void main_loop() {
-    vbyte ep = 0;
 
     while(loop) { 
-	ep = execute_cmd(ep);
+	if( pausecpu ) continue;
+	if( onestep == 1) {
+	    ep = execute_cmd(ep);
+	    onestep = 0;
+	    pausecpu = 1;
+	}else{
+	    ep = execute_cmd(ep);
+	}
+	sleep(sleeptime);
+
     }
 }
 

@@ -20,5 +20,6 @@ struct page_slab
 struct page* new_page_struct();
 void show_page_slab_list();
 
+extern struct page_slab *global_page_slab_list;
 
 #endif
