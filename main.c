@@ -225,11 +225,17 @@ void vsave(char *buff){
     ifsf("page", vsave_page);
 }
 
+void vrun_times(char *buff){
+    arg1(n);
+    if( empty(n) ) { return; }
+    execute_cmd_n( strtovbyte(n) );
+}
 
 void vrun(char *buff){
     init();
     ifs("") { printf("Usage:\n\tonce\n"); return;}
     ifs("once") { execute_cmd_once(); }
+    ifsf("times",vrun_times); 
 }
 
 int main(int argc, char **argv) {

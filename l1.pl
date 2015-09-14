@@ -158,15 +158,43 @@ print "debug. label=$label, cmd=$cmd\n";
 	}
 	$curraddr+= 4;
 
+    }elsif($name eq "ifjmp2" ) {
+
+	my @a;
+	for(my $i=1;$i<scalar(@args);++$i){	
+	    push(@a, $args[$i]);
+	}
+	push(@metalines, {
+	    nr => $i,
+	    name => $name,
+	    code => [ 8 ],
+	    label => ($label? $label : undef ),
+	    address => $curraddr,
+	    args => \@a,
+	} );
+	if( $label ) {
+	    if( $labels{$label} ) { 
+		die("compilation error: label duplicate $label\n");
+	    }
+	    $labels{$label} = $curraddr;
+	}
+	$curraddr+= 4;
+
 
     }elsif($name eq "db" ) {
+	
+	my @a;
+	for(my $i=1;$i<scalar(@args);++$i){	
+	    push(@a, $args[$i]);
+	}
 	
 	push(@metalines, {
 	    nr => $i,
 	    name => $name,
-	    code =>[ hex($args[1]) ],
+	    code =>[ ],
 	    label => ($label? $label : undef ),
 	    address => $curraddr,
+	    args => \@a,
 	} );
 	if( $label ) {
 	    if( $labels{$label} ) { 
@@ -224,6 +252,8 @@ foreach my $metaline (@metalines) {
 	foreach my $a (@a) {
 	    if( $labels{$a} ) {
 		push(@$metaline{code}, $labels{$a});
+	    }elsif( $a =~ /0x[0-9a-fA-F]+/ ) {
+		push(@$metaline{code}, hex($a));
 	    }else{
 		die("compilatino error: unknown label $a\n");
 	    }

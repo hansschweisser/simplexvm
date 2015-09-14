@@ -59,6 +59,13 @@ vbyte cmd_ifjmp(vbyte address) {
 	return address+4;
 }
 
+vbyte cmd_ifjmp2(vbyte address) {
+    if( read_vbyte(read_vbyte(address+1)) == read_vbyte(read_vbyte(address+2)) )
+	return read_vbyte(read_vbyte(address+3));
+    else
+	return address+4;
+}
+
 vbyte cmd_idle(vbyte address) {
     return address+1;
 }
@@ -67,8 +74,7 @@ vbyte cmd_idle(vbyte address) {
 int loop = 1;
 
 vbyte cmd_exit(vbyte address){
-    loop = 0;
-    return address+1;
+    return address;
 }
 
 
@@ -84,7 +90,8 @@ struct command commands[] = {
     { 4, cmd_and },
     { 5, cmd_ifjmp },
     { 6, cmd_idle },
-    { 7, cmd_exit }
+    { 7, cmd_exit },
+    { 8, cmd_ifjmp2 }
 };
 
 
@@ -122,6 +129,11 @@ void execute_cmd_once() {
     ep = execute_cmd(ep);
 }
 
+void execute_cmd_n(int n){
+    for(int i=0;i<n;++i){
+	ep = execute_cmd(ep);
+    }
+}
 
 void main_loop() {
 
