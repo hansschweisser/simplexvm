@@ -1,10 +1,11 @@
+#include <termios.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <inttypes.h>
 #include <stdint.h>
 #include <string.h>
-
+#include "tree.h"
 
 #include "page_slab.h"
 #include "page.h"
@@ -239,20 +240,78 @@ void vrun(char *buff){
 }
 
 int main(int argc, char **argv) {
-    
+
+    struct termios old_tio, new_tio;
+    unsigned char c;
+
+    /* get the terminal settings for stdin */
+    tcgetattr(STDIN_FILENO,&old_tio);
+    /* we want to keep the old setting to restore them a the end */
+    new_tio=old_tio;
+    /* disable canonical mode (buffered i/o) and local echo */
+    new_tio.c_lflag &=(~ICANON & ~ECHO);
+    /* set the new settings immediately */
+    tcsetattr(STDIN_FILENO,TCSANOW,&new_tio);
+
+
     printf("Simplexvm %s, by %s\n",VERSION, AUTHOR);
+
+
+    struct node *root = new_node("");
+    struct node *nhelp = new_node("help");
+    struct node *nversion = new_node("version");
+
+
+    node_add_child(root,nhelp);
+    node_add_child(root,nversion);
+        
+
+
     while(1) {
 	string(cmd);
 	string(args);
 	string(buff);
-	
+	int ch;
+	int index = 0;	
+
 	memset(cmd,0,sizeof(cmd));
 	memset(args,0,sizeof(args));
 	memset(buff,0,sizeof(buff));
 
 
 	printf("> ");
-	fgets(buff,5000,stdin);
+	
+	//fgets(buff,5000,stdin);
+	
+	int charloop = 1;
+	while(charloop) {
+	    ch = getchar();
+	
+	    switch(ch) {
+		case 0x7f:
+		    if( index == 0 ) continue;
+		    --index;
+		    buff[index]=0;
+		    printf("\b \b");
+		    break;
+		case '\t' : 
+		    printf("\n");
+		    node_show_current(root,buff);
+		    printf("> %s", buff);
+		    break;
+		case '\n' :
+		    charloop=0;
+		    continue;
+		    break;    
+		default:
+		    buff[index] = ch;	
+		    ++index;
+		    printf("%c",ch);
+		    break;		
+	    }
+	}
+	
+	printf("debug.buff=[%s]\n",buff);
 
 	parse();
 	ifs("quit") break;
@@ -269,6 +328,6 @@ int main(int argc, char **argv) {
 	
     }
 
-    
+    tcsetattr(STDIN_FILENO,TCSANOW,&old_tio);
     return 0;
 }

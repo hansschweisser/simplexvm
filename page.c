@@ -159,7 +159,7 @@ void dump_page(struct page* page){
     int perline = 8;
 
     for(int i=0;i<(1<<PAGE_SIZE);++i){	
-	printf("%8" PRIx64 " ", *(page->p + i ) );
+	printf("%16" PRIx64 " ", *(page->p + i ) );
 	if( (i+1) % perline  == 0 ) printf("\n");
     }
     printf("\n");

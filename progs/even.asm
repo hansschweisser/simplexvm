@@ -8,7 +8,7 @@ odd:		exit
 
 
 
-arg1:		db 0xabcdef
+arg1:		db 0xabcdef0
 
 firstbit:	db 0x1
 zero:		db 0x0
