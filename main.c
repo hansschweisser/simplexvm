@@ -256,14 +256,18 @@ int main(int argc, char **argv) {
 
     printf("Simplexvm %s, by %s\n",VERSION, AUTHOR);
 
+    struct node *curr;
 
     struct node *root = new_node("");
     struct node *nhelp = new_node("help");
     struct node *nversion = new_node("version");
+    struct node *nauthor = new_node("author");
 
+    curr = root;
 
     node_add_child(root,nhelp);
     node_add_child(root,nversion);
+    node_add_child(root,nauthor);
         
 
 
@@ -294,6 +298,9 @@ int main(int argc, char **argv) {
 		    buff[index]=0;
 		    printf("\b \b");
 		    break;
+		//case ' ' :
+		         
+		//    break;
 		case '\t' : 
 		    printf("\n");
 		    node_show_current(root,buff);

@@ -16,8 +16,12 @@ struct node {
     char * prompt;
     char * help;
     char * helpline;
+    
+    void (*f)(char *buff);
 
 };
+
+
 
 
 struct node * new_node(char *name){
@@ -36,6 +40,7 @@ struct node * new_node(char *name){
     node->help = NULL;
     node->helpline = NULL;
 
+    node->f = NULL;
     return node;
 }
 
@@ -66,7 +71,6 @@ void node_show_current(struct node *curr, char *cmd){
 	if( strncmp(cmd,p->name,strlen(cmd)) == 0 ){
 	    printf("\t%s - %s\n", p->name , (p->helpline? p->helpline : "?" ) );
 	}
-	printf("debug.p->name = %s\n", p->name);
 
 	p = p->next;
 	    
@@ -74,8 +78,17 @@ void node_show_current(struct node *curr, char *cmd){
 }
 
 
-
-
+struct node* node_find(struct node *curr, char *name){
+    if( curr == NULL ) return NULL;
+    struct node *p = curr->child;
+    while(p){
+	if( strcmp(name,p->name) == 0 ) {
+	    return p;
+	}
+	p=p->next;
+    }
+    return NULL;
+}
 
 
 

@@ -29,4 +29,8 @@ proc:	idle
 	ifjmp2 zero zero proc_return
 
 
+var A 0x0
+var A
+var A = 10; var B = 10;
+var A,B = 10;
 
