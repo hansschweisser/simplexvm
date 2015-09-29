@@ -34,3 +34,16 @@ var A
 var A = 10; var B = 10;
 var A,B = 10;
 
+
+
+%call proc(X Y) O1 O2
+
+
+
+%function proc(arg1 arg1) out1 out2
+	copy
+	or 
+	...
+%endfunction proc
+
+
