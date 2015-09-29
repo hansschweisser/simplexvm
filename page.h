@@ -8,7 +8,7 @@
 #define UNUSED 0
 #define USED 1
 
-#define PAGE_SIZE 8 // bits shift
+#define PAGE_SIZE 4 // bits shift
 
 struct page 
 {

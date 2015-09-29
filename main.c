@@ -5,7 +5,6 @@
 #include <inttypes.h>
 #include <stdint.h>
 #include <string.h>
-#include "tree.h"
 
 #include "page_slab.h"
 #include "page.h"
@@ -30,6 +29,11 @@
 #define arg2(s) string(s); do { string(empty); sscanf(buff,"%s %s", empty, s); } while(0)
 #define arg3(s) string(s); do { string(empty); sscanf(buff,"%s %s %s", empty, empty, s);}while(0)
 #define empty(s) ( strcmp(s,"") == 0 ? 1 :0 )
+#define completion(str) if(autocompletion){printf("\n %s\n",str);autocompletion=0;}
+#define completionr(str) if(autocompletion){printf("\n %s\n",str);autocompletion=0;return;}
+
+int autocompletion = 0;
+
 
 vbyte strtovbyte(char *c){
     vbyte byte = 0;
@@ -39,12 +43,16 @@ vbyte strtovbyte(char *c){
 
 void vshow_stats(char *buff) {
     init();
+    completionr("<enter>");
+    printf("Not yet implemented\n");
     
     
 }
 
 void vshow_var(char *buff) {
     init();
+    
+    completionr("slabount | pagecount | <enter>");
 
     ifs("") {
 	printf("Usage:\n\tvar slabcount\n\tvar pagecount\n");
@@ -73,14 +81,17 @@ void vshow_var(char *buff) {
 }
 
 void vshow_usage(){
+    completionr("<enter>");
     printf("Usage:\n    show \n    show help\n    show var ..\n    show stats ...\n");
 }
 void vshow_help(){
+    completionr("<enter>");
     printf("No help yet\n");
 }
 
 void vshow_page_index(char* buff){
     arg1(index);
+    completionr("[index]");
     int n = strtovbyte(index);
     int i=0;
 
@@ -96,29 +107,35 @@ void vshow_page_index(char* buff){
 }
 
 void vshow_page_all(char *buff){
+    completionr("<enter>");
     dump_all_pages();
 }
 
 void vshow_page(char *buff){
     init();
-    ifs("") { printf("Usage:\n\t index $n\n");}
     ifsf("index", vshow_page_index);
     ifsf("all", vshow_page_all);
+    completionr("index | all | <enter>");
+    ifs("") { printf("Usage:\n\t index $n\n");}
 }
 
 void vshow(char *buff) {
     init();
-    ifsf("", vshow_usage);
     ifsf("help", vshow_help);
     ifsf("var",vshow_var);
     ifsf("stats",vshow_stats);    
     ifsf("page", vshow_page);
+    completionr("help | var | stats | page | <enter>");
+    ifsf("", vshow_usage);
+
+
 }
 
 void vwrite_mem(char *buff){
     arg1(address);
     arg2(value);
 
+    completionr("[address] [value]");
     if( !(empty(address) || empty(value)  )) { 
 	write_vbyte(strtovbyte(address), strtovbyte(value));        
     }
@@ -128,6 +145,7 @@ void vwrite_mem(char *buff){
 void vwrite_reg(char *buff) {
     arg1(reg);
     arg2(value);
+    completionr("[reg] [value]");
     if( empty(reg) ) { printf("Usage:\n\t$reg $value\n"); return;}
     if( empty(value) ) return;
 
@@ -143,7 +161,7 @@ void vread_mem(char *buff){
 
 void vread_reg(char *buff){
     arg1(reg);
-    
+    completionr("[reg] | <enter>");
     if(empty(reg)) { printf("List of registers\n\tep\n"); return;}
     printf("%016" PRIx64 "\n", ep);
 }
@@ -152,16 +170,19 @@ void vread_reg(char *buff){
 
 void vwrite(char *buff){
     init();
-    ifs("") { printf("Usage\n\tmem $address $value\n");}
     ifsf("mem", vwrite_mem);
     ifsf("reg" , vwrite_reg);
+    completionr("mem | reg | <enter>");
+    ifs("") { printf("Usage\n\tmem $address $value\n");}
 }
 
 void vread(char *buff){
     init();
-    ifs("") { printf("Usage:\n\t mem $address $value\n");}
     ifsf("mem", vread_mem);    
     ifsf("reg", vread_reg);
+    completionr("mem | reg | <enter>");
+    ifs("") { printf("Usage:\n\t mem $address $value\n");}
+
 }
 
 void vload_file_raw(char *buff){
@@ -255,35 +276,33 @@ int main(int argc, char **argv) {
 
 
     printf("Simplexvm %s, by %s\n",VERSION, AUTHOR);
-
-    struct node *curr;
-
-    struct node *root = new_node("");
-    struct node *nhelp = new_node("help");
-    struct node *nversion = new_node("version");
-    struct node *nauthor = new_node("author");
-
-    curr = root;
-
-    node_add_child(root,nhelp);
-    node_add_child(root,nversion);
-    node_add_child(root,nauthor);
-        
+    string(cmd);
+    string(args);
+    string(buff);
 
 
+    int tabpressed=0;
+    int enterpressed=0;
     while(1) {
-	string(cmd);
-	string(args);
-	string(buff);
 	int ch;
 	int index = 0;	
+    
+	if(!tabpressed){
+	    tabpressed=0;
+	    memset(cmd,0,sizeof(cmd));
+    	    memset(args,0,sizeof(args));
+    	    memset(buff,0,sizeof(buff));
 
-	memset(cmd,0,sizeof(cmd));
-	memset(args,0,sizeof(args));
-	memset(buff,0,sizeof(buff));
+	}
+	if(enterpressed){
+	    memset(cmd,0,sizeof(cmd));
+    	    memset(args,0,sizeof(args));
+    	    memset(buff,0,sizeof(buff));
+	    enterpressed=0;
+	}	
 
-
-	printf("> ");
+	printf("> %s",buff);
+	index = strlen(buff);
 	
 	//fgets(buff,5000,stdin);
 	
@@ -302,12 +321,19 @@ int main(int argc, char **argv) {
 		         
 		//    break;
 		case '\t' : 
-		    printf("\n");
-		    node_show_current(root,buff);
-		    printf("> %s", buff);
+		    //printf("\n");
+		    autocompletion = 1;
+		    //printf("> %s", buff);
+		    tabpressed=1;
+		    enterpressed=0;
+		    charloop=0;
+		    continue;
 		    break;
 		case '\n' :
 		    charloop=0;
+		    printf("\n");
+		    enterpressed=1;
+		    tabpressed=0;
 		    continue;
 		    break;    
 		default:
@@ -318,12 +344,22 @@ int main(int argc, char **argv) {
 	    }
 	}
 	
-	printf("debug.buff=[%s]\n",buff);
+//	printf("debug.buff=[%s]\n",buff);
 
 	parse();
-	ifs("quit") break;
-	ifs("exit") break;
+	ifs("quit") {
+	    completion("<enter>")
+	    else
+	    break;
+	}
+	ifs("exit") {
+	    completion("<enter>")
+	    else
+	    break;
+	}
 	ifs("version") {
+	    completion("<enter>")
+	    else 
 	    printf("Spimpexvm %s, by %s\n", VERSION, AUTHOR);
 	}
 	ifsf("show",vshow);
@@ -332,6 +368,8 @@ int main(int argc, char **argv) {
 	ifsf("load", vload);
 	ifsf("run", vrun);
 	ifsf("save", vsave);
+	
+        completion("quit | exit | version | show | write | read | lad | run | save");
 	
     }
 
