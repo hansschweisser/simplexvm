@@ -34,10 +34,17 @@ var A
 var A = 10; var B = 10;
 var A,B = 10;
 
+%inc A
+%move A B
+%add A B C
+%sub A B C
+%lshift A B n
+%rshift A B n
+
 
 
 %call proc(X Y) O1 O2
-
+%var U
 
 
 %function proc(arg1 arg1) out1 out2

@@ -52,12 +52,9 @@ void vshow_stats(char *buff) {
 void vshow_var(char *buff) {
     init();
     
-    completionr("slabount | pagecount | <enter>");
 
-    ifs("") {
-	printf("Usage:\n\tvar slabcount\n\tvar pagecount\n");
-    }
     ifs("slabcount") {
+	completionr("<enter>");
 	int i=0;
 	struct page_slab *p = global_page_slab_list;
 	while( p ) { 
@@ -68,6 +65,7 @@ void vshow_var(char *buff) {
 	printf("%d\n",i);
     }
     ifs("pagecount") {
+	completionr("<enter>");
 	struct page* p = global_page_list;
 	int i=0;
 	while(p) { 
@@ -76,6 +74,10 @@ void vshow_var(char *buff) {
 	    p=p->next;
 	}
 	printf("%d\n",i);
+    }
+    completionr("slabount | pagecount | <enter>");
+    ifs("") {
+	printf("Usage:\n\tvar slabcount\n\tvar pagecount\n");
     }
         
 }
@@ -154,6 +156,7 @@ void vwrite_reg(char *buff) {
 
 void vread_mem(char *buff){
     arg1(address);
+    completionr("[address]");
     if( empty(address) ) return;
     vbyte byte = read_vbyte(strtovbyte(address));
     printf("%016" PRIx64 "\n", byte);
@@ -188,6 +191,7 @@ void vread(char *buff){
 void vload_file_raw(char *buff){
     arg1(file);
     arg2(address);
+    completionr("[file] [address]");
     
     if( empty(file) ) return;
     if( empty(address) ) return;
@@ -197,19 +201,23 @@ void vload_file_raw(char *buff){
 
 void vload_file(char *buff){
     init();
-    ifs("") { printf("Usage:\n\t raw\n"); }
     ifsf("raw", vload_file_raw);
+    completionr("raw | <enter>");
+    ifs("") { printf("Usage:\n\t raw\n"); }
+    
 }
 
 void vload(char *buff){
     init();
     
     ifsf("file", vload_file);
+    completionr("file");
 }
 
 void vsave_page_to_file_index(char *buff){
     arg1(index);
     arg2(file);
+    completionr("[index] [file]");
     if( empty(index) ) return;
     if( empty(file) ) return;
     int iindex = strtovbyte(index);
@@ -229,35 +237,42 @@ void vsave_page_to_file_index(char *buff){
 
 void vsave_page_to_file(char*buff){
     init();
+    completionr("index");
     ifsf("index", vsave_page_to_file_index);
 }
 
 void vsave_page_to(char *buff){
     init();
+    completionr("file");
     ifsf("file", vsave_page_to_file);
 }
 
 void vsave_page(char *buff){
     init();
+    completionr("to");
     ifsf("to", vsave_page_to);
 }
 
 void vsave(char *buff){
     init();
+    completionr("page");
     ifsf("page", vsave_page);
 }
 
 void vrun_times(char *buff){
     arg1(n);
+    completionr("[times]");
     if( empty(n) ) { return; }
     execute_cmd_n( strtovbyte(n) );
 }
 
 void vrun(char *buff){
     init();
-    ifs("") { printf("Usage:\n\tonce\n"); return;}
     ifs("once") { execute_cmd_once(); }
     ifsf("times",vrun_times); 
+    completionr("once | times");
+    ifs("") { printf("Usage:\n\tonce\n"); return;}
+
 }
 
 int main(int argc, char **argv) {

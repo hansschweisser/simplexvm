@@ -274,8 +274,8 @@ foreach my $b (@binary) {
 
 close FILE;
 
-print Dumper(\@metalines);
-print Dumper(\%labels);
-print Dumper(\@binary);
+#print Dumper(\@metalines);
+#print Dumper(\%labels);
+#print Dumper(\@binary);
 
 
