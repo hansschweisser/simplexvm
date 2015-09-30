@@ -1,0 +1,6 @@
+ifjmp var-0 var-1 var-2
+copy var-3 var-0
+var-2: idle
+var-0: db 0xffffff
+var-1: db 0x0
+var-3: db 0xaaaaaa

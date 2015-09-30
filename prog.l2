@@ -24,4 +24,4 @@ proc main
 	set a 50
     end    
     set a 60
-end
+endp

@@ -1,0 +1,9 @@
+var x
+begin
+    var one 0x1
+    var two 0x2
+    var three 0x3
+    if x
+	set x 0x4
+    end
+end

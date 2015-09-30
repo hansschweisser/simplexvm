@@ -21,6 +21,7 @@ sub get_var_index{
 sub get_tmp_var{
     my ($val) = @_;
     my $index = get_var_index();
+    $val = convert_to_hex($val);
     push(@variables,{name=>$index,index=>$index,value=>$val,});
     return $index;
 }
@@ -81,7 +82,11 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	push(@endstack,{type=>"begin",});
     }elsif($cmd[0] eq "end" ){
 	pop(@namespace);
-	pop(@endstack);
+	my $end = pop(@endstack);
+	my %end = %{$end};
+	if( $end{type} eq "if" ){
+	    push(@output, {type=>"label", name=>$end{index},});
+	}
     }elsif($cmd[0] eq "set" ){
 	if(! ($cmd[1] && $cmd[2]) ){
 	    die "compilation error: set name (value|name)";
@@ -98,9 +103,17 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	    push(@output, {code=>"copy $tmpvar $vi1",});
 	}
     }elsif($cmd[0] eq "if"){
+	push(@namespace,[]);
 	if( $cmd[1] and (not $cmd[2]) ){
-	    
+	    my $vi = get_index_of_variable($cmd[1]);
+	    my $tmp = get_tmp_var("0x0");
+	    my $ifindex = get_var_index();
+	    push(@endstack,{type=>"if", arg1=> $vi , arg2 => $tmp , index=>$ifindex,});
+	    push(@output, {type=>"if", arg1=> $vi, arg2 => $tmp, index=>$ifindex,});
+	}else{
+	    die "compilation error: not recognised 'if' statement";
 	}
+	
     }
     
 }
@@ -112,15 +125,51 @@ foreach my $var (@variables){
     push(@output, {code=>"$index: db $value",});
 }
 
+foreach my $var (@output) {
+    if( ! $var->{code} ){
+	if( $var->{type} eq "label" ){
+	    $var->{code} = "$var->{name}: idle";
+	}elsif ($var->{type} eq "if" ){
+	    $var->{code} = "ifjmp $var->{arg1} $var->{arg2} $var->{index}";
+	}else{
+	    die "compilation error: unknown line type $var->{type}";
+	}	
+    }	
+}
+
+my @code ;
+my $code;
+foreach my $var (@output) {
+    push(@code,$var->{code});
+    $code .= "$var->{code}\n";
+}
+#print $code;
+
+
+
 #print Dumper(\@variables);
 #print Dumper(\@namespace);
 
 
-print Dumper(\@output);
+#print Dumper(\@output);
 
 
 sub convert_to_hex()
 {
+    
     my ($value) = @_;
-    return sprintf("0x%x", $value);
+    if( ($value =~ /^0x[0-9a-fA-f]+$/) ){
+	return sprintf("0x%x", hex($value));
+    }else{
+	die "compilation error: unknown format of number $value";
+    }
 }
+
+
+
+my $filebin = $file;
+$filebin =~ s{\.[^.]+$}{};
+$filebin = $filebin . ".l1";
+open FILE  , ">". $filebin or die("error: cannot open file [$filebin]\n");
+printf(FILE "%s", $code);
+close FILE;

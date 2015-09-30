@@ -1,0 +1,4 @@
+var a 0xffffff
+if a 
+    set a 0xaaaaaa
+end
