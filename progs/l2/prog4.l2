@@ -1,0 +1,3 @@
+var a 0xabcdef
+var b
+set a b

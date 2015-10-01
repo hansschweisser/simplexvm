@@ -1,0 +1,19 @@
+ifjmp var-0 var-2 var-1
+copy var-3 var-0
+ifjmp zero zero var-1
+ifjmp var-0 var-5 var-4
+copy var-6 var-0
+ifjmp zero zero var-4
+ifjmp var-0 var-8 var-7
+copy var-9 var-0
+var-7: idle
+var-4: idle
+var-1: idle
+zero: db 0x0
+var-0: db 0x10
+var-2: db 0x12
+var-3: db 0x11
+var-5: db 0x11
+var-6: db 0x12
+var-8: db 0x10
+var-9: db 0x13

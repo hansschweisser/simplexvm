@@ -17,6 +17,7 @@ sub get_var_index{
     $var_index++;
     return "var-". ($var_index-1);
 }
+push(@variables,{name=>"zero",value=>"0x0",index=>"zero",});
 
 sub get_tmp_var{
     my ($val) = @_;
@@ -97,6 +98,7 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	if( is_variable($cmd[2]) ){
 	    my $vi1 = get_index_of_variable($cmd[1]);
 	    my $vi2 = get_index_of_variable($cmd[2]);
+	    push(@output, {code=> "copy $vi2 $vi1",});
 	}else{
 	    my $vi1 = get_index_of_variable($cmd[1]);
 	    my $tmpvar = get_tmp_var($cmd[2]);
@@ -104,16 +106,43 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	}
     }elsif($cmd[0] eq "if"){
 	push(@namespace,[]);
+	my $ifindex = get_var_index();
 	if( $cmd[1] and (not $cmd[2]) ){
 	    my $vi = get_index_of_variable($cmd[1]);
-	    my $tmp = get_tmp_var("0x0");
-	    my $ifindex = get_var_index();
+	    my $tmp = get_tmp_var("0x0");    
 	    push(@endstack,{type=>"if", arg1=> $vi , arg2 => $tmp , index=>$ifindex,});
 	    push(@output, {type=>"if", arg1=> $vi, arg2 => $tmp, index=>$ifindex,});
+	}elsif( $cmd[1] && $cmd[2] ) {
+	    if( is_variable($cmd[2]) ){
+		my $vi1 = get_index_of_variable($cmd[1]);
+		my $vi2 = get_index_of_variable($cmd[2]);
+		push(@output, {type=>"if", arg1=>$vi1 , arg2 =>$vi2, index=>$ifindex,});
+		push(@endstack, {type=>"if", arg1=>$vi1 , arg2 =>$vi2, index=>$ifindex,});		
+	    }else{
+		my $vi1 = get_index_of_variable($cmd[1]);
+		my $tmp = get_tmp_var($cmd[2]);
+		push(@endstack,{type=>"if", arg1=> $vi1 , arg2 => $tmp , index=>$ifindex,});
+	        push(@output, {type=>"if", arg1=> $vi1, arg2 => $tmp, index=>$ifindex,});	
+	    }
 	}else{
 	    die "compilation error: not recognised 'if' statement";
 	}
 	
+    }elsif($cmd[0] eq "else"){
+	pop(@namespace);
+	push(@namespace,[]);
+	
+	my $end = pop(@endstack);
+	my %end = %{$end};
+print Dumper(\%end);
+	if( $end{type} eq "if" ){
+	    push(@output,{type=>"else", label=>$end{index},});
+	}else{
+	    die "compilation error: expected 'if' before 'else'";
+	}
+	push(@endstack,$end);
+    }else{
+	print "unknown line '$line'\n";
     }
     
 }
@@ -131,6 +160,8 @@ foreach my $var (@output) {
 	    $var->{code} = "$var->{name}: idle";
 	}elsif ($var->{type} eq "if" ){
 	    $var->{code} = "ifjmp $var->{arg1} $var->{arg2} $var->{index}";
+	}elsif ($var->{type} eq "else" ){
+	    $var->{code} = "ifjmp zero zero $var->{label}";
 	}else{
 	    die "compilation error: unknown line type $var->{type}";
 	}	
@@ -147,11 +178,11 @@ foreach my $var (@output) {
 
 
 
-#print Dumper(\@variables);
+print Dumper(\@variables);
 #print Dumper(\@namespace);
 
 
-#print Dumper(\@output);
+print Dumper(\@output);
 
 
 sub convert_to_hex()

@@ -1,27 +1,13 @@
+var a 0x10
+if a 0x12
+    set a 0x11
+else
+if a 0x11
+    set a 0x12
+else
+if a 0x10
+    set a 0x13
+end
+end
+end
 
-proc main
-    var a
-    set a 10
-    var b
-    var c 10
-    var d 0x10
-    var e 01010101010111010101010b
-    begin
-	var x
-	var y
-	set a 20
-	begin 
-	    var k
-	    var l
-	    set a x
-	    var x
-	    set a 30 
-	    set a x
-	    var a
-	    set a 40
-	    set a x
-	end
-	set a 50
-    end    
-    set a 60
-endp
