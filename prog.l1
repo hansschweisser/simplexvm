@@ -1,19 +1,15 @@
-ifjmp var-0 var-2 var-1
-copy var-3 var-0
-ifjmp zero zero var-1
-ifjmp var-0 var-5 var-4
-copy var-6 var-0
-ifjmp zero zero var-4
-ifjmp var-0 var-8 var-7
-copy var-9 var-0
-var-7: idle
-var-4: idle
-var-1: idle
+copy label0003 label0000
+copy return-var-label0001 proc-return-label0001 
+ifjmp zero zero label0001
+return-var-label0001: db call-return-label0001
+call-return-label0001: idle
+copy label0004 label0000
 zero: db 0x0
-var-0: db 0x10
-var-2: db 0x12
-var-3: db 0x11
-var-5: db 0x11
-var-6: db 0x12
-var-8: db 0x10
-var-9: db 0x13
+label0000: db 0xffffffff
+label0002: db 0xbbbbbbb
+label0003: db 0xaaaaaaaaa
+label0004: db 0xccccccccc
+proc-return-label0001: db 0x0
+label0001: idle
+copy label0002 label0000
+ifjmp2 zero zero proc-return-label0001

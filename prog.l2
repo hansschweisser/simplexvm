@@ -1,13 +1,12 @@
-var a 0x10
-if a 0x12
-    set a 0x11
-else
-if a 0x11
-    set a 0x12
-else
-if a 0x10
-    set a 0x13
+var a 0xffffffff
+proc test
+    set a 0xbbbbbbb
 end
-end
-end
+
+
+set a 0xaaaaaaaaa
+call test
+set a 0xccccccccc
+
+
 
