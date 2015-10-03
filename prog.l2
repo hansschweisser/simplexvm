@@ -1,12 +1,7 @@
-var a 0xffffffff
-proc test
-    set a 0xbbbbbbb
+proc name -> C
+    set C 0x11
 end
 
 
-set a 0xaaaaaaaaa
-call test
-set a 0xccccccccc
-
-
-
+var A 
+call name  -> A

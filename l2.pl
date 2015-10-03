@@ -163,9 +163,9 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	}
 	if( $end{type} eq "proc" ){
 	    code_push({type=>"procend", index=>$end{index},name=>$end{index},});
-	    my @body = code_prevnamespace();
+	    my $body = code_prevnamespace();
 	    proc_prevnamespace();
-	    push(@procedures, { code=> @body, head=>$end,});
+	    push(@procedures, { code=> $body, head=>$end,});
 	}
     }elsif($cmd[0] eq "set" ){
 	if(! ($cmd[1] && $cmd[2]) ){
@@ -177,7 +177,7 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	if( is_variable($cmd[2]) ){
 	    my $vi1 = get_index_of_variable($cmd[1]);
 	    my $vi2 = get_index_of_variable($cmd[2]);
-	    code_push({code=> "copy $vi2 $vi1",});
+	    code_push({type=>"copy", arg1=>$vi2, arg2=>$vi1,});
 	}else{
 	    my $vi1 = get_index_of_variable($cmd[1]);
 	    my $tmpvar = get_tmp_var($cmd[2]);
@@ -225,20 +225,57 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	}
 	code_newnamespace();
 	var_newnamespace();
-	
+	my @argin;
+	my @argout;
+	my $argtype  = 0;	
+	my @argindexin;
+	my @argindexout;
+
 	my $procindex = get_var_index();
-	if( (scalar @cmd) == 2 ){
+
+	foreach my $a (2..((scalar @cmd)-1)){
+	    my $vi = "proc-var-$cmd[$a]-$procindex";	    
+	    if( $cmd[$a] eq "->" ) { $argtype = 1; next; }
+	    if( $argtype == 0 ) { push(@argin,$cmd[$a]); push(@argindexin, $vi); }
+	    if( $argtype == 1 ) { push(@argout,$cmd[$a]);push(@argindexout, $vi); }
+	    
+	    push(@variables,{name=>$cmd[$a],index=>$vi,value=>"0x0",}); 
+	    var_push({name => $cmd[$a], index=>$vi, });
+	}
 	    proc_push({name=>$cmd[1], index=>$procindex,});
 	    proc_newnamespace();
-	    push(@endstack, {type=>"proc", index=>$procindex,name=>$cmd[1],});
-	    code_push( {type=>"prochead", index=>$procindex,name=>$cmd[1],});
-	}
+	    push(@endstack, {type=>"proc", argsin=>\@argin, argsout=>\@argout, index=>$procindex,name=>$cmd[1], argindexin=>\@argindexin, argindexout => \@argindexout,});
+	    code_push(  {type=>"prochead", argsin=>\@argin, argsout=>\@argout, index=>$procindex,name=>$cmd[1], argindexin=>\@argindexin, argindexout => \@argindexout,});
+	
     }elsif($cmd[0] eq "call"){
 	if( not $cmd[1] ) {
 	    die "compilation error: call no procedure";
 	}
+	my @argin;
+	my @argout;
 	my $inx = get_index_of(\@procnamespace,$cmd[1]);
-	code_push({type=>"call", name=>$cmd[1], index=>$inx,});
+	my $argtype = 0;
+	foreach my $i (2..((scalar @cmd)-1)){
+	    if( $cmd[$i] eq "->" ) { $argtype = 1; next; }
+	    my $vi = get_index_of_variable($cmd[$i]);
+	    if( $argtype == 0 ) { push(@argin, $vi); }
+	    if( $argtype == 1 ) { push(@argout, $vi); }
+	}
+	my @procargin;
+	my @procargout;	
+
+	my $found = 0;
+	foreach my $p (@procedures){
+	    if( $p->{head}->{index} eq $inx ){
+		@procargin = @{$p->{head}->{argindexin}};
+		@procargout = @{$p->{head}->{argindexout}};
+		$found = 1;
+		last;
+	    }
+	}
+	if( $found == 0 ) { die "compilation error: unknown function $cmd[1]";}
+
+	code_push({type=>"call", name=>$cmd[1], index=>$inx, argin=>\@argin, argout=>\@argout, argprocin => \@procargin, argprocout => \@procargout,});
     }elsif($cmd[0] eq "idle"){
 	code_push({type=>"idle",});
     }else{
@@ -272,11 +309,32 @@ foreach my $var (@list) {
 	}elsif ($var->{type} eq "else" ){
 	    $var->{code} = ["ifjmp zero zero $var->{label}"];
 	}elsif ($var->{type} eq "call" ){
+	    print "debug.call = ".Dumper($var);
+
+	    my @code;
+
+	    my @ain = @{$var->{argin}};
+	    my @aout = @{$var->{argout}};
+	    my @aprocin = @{$var->{argprocin}};
+	    my @aprocout = @{$var->{argprocout}};
+	    for my $i (0..((scalar @ain)-1)){
+		my $codevar = $ain[$i];
+		my $procvar = $aprocin[$i];
+		
+		push(@code, "copy $codevar $procvar");
+	    }
 	    my $indx = $var->{index};
-	    $var->{code} = ["copy return-var-$indx proc-return-$indx " ,
+	    push(@code ,  ("copy return-var-$indx proc-return-$indx " ,
 			    "ifjmp zero zero $indx",	
 			    "return-var-$indx: db call-return-$indx", 
-			    "call-return-$indx: idle"  ];
+			    "call-return-$indx: idle"  ));
+	    for my $i (0..((scalar @aout)-1)){
+		my $codevar = $aout[$i];
+		my $procvar = $aprocout[$i];
+	    
+		push(@code, "copy $procvar $codevar");
+	    }
+	    $var->{code} = \@code;
 	}elsif($var->{type} eq "procend" ){
 	    $var->{code} = [ "ifjmp2 zero zero proc-return-$var->{index}" ];
 	}elsif($var->{type} eq "prochead" ) {
@@ -329,9 +387,10 @@ foreach my $l (@fullcode){
 
 
 #print "\@variables = " . Dumper(\@variables);
-#print "\@procecures = " .  Dumper(\@procedures);
+print "\@procecures = " .  Dumper(\@procedures);
 #print "\@maincode = " . Dumper(\@maincode);
-#print "\@code = " . Dumper(\@code);
+print "\@code = " . Dumper(\@code);
+print "\$maincode = ".Dumper($maincode);
 
 sub convert_to_hex()
 {
