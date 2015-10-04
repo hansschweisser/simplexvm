@@ -16,7 +16,7 @@ my @lines = split(/\n/,$output);
 my $i = 0;
 my $curraddr = 0;
 foreach my $line (@lines) {
-print "debug.line = /$line/\n";
+#print "debug.line = /$line/\n";
     my @labels = split(/:/, $line);
     my $cmd;
     my $label;
@@ -35,7 +35,7 @@ print "debug.line = /$line/\n";
     $label =~ s/^\s+|\s+$//g;
     $cmd =~ s/^\s+|\s+$//g;
 
-print "debug. label=$label, cmd=$cmd\n";
+#print "debug. label=$label, cmd=$cmd\n";
 
     my @args = split(/[ \t]+/, $cmd );
     

@@ -98,12 +98,12 @@ struct command commands[] = {
 
 vbyte execute_cmd(vbyte address) {
     vbyte cmd = read_vbyte(address);
-printf("debug.execute_cmd(%016" PRIx64 ")\n",address);
-printf("debug.execute_cmd sizeof(commands) = %d\n", (int)(sizeof(commands)/sizeof(commands[0])));
+//printf("debug.execute_cmd(%016" PRIx64 ")\n",address);
+//printf("debug.execute_cmd sizeof(commands) = %d\n", (int)(sizeof(commands)/sizeof(commands[0])));
     for(int i=0;i<sizeof(commands)/sizeof(commands[0]);++i){
-printf("debug.execute_cmd i=%d\n",i);
+//printf("debug.execute_cmd i=%d\n",i);
 	if( cmd == commands[i].cmd ) {
-printf("debug.execute_cmd executing command %016" PRIx64 "\n",cmd);
+//printf("debug.execute_cmd executing command %016" PRIx64 "\n",cmd);
 	    return (commands[i].execute)(address);
 	}
     }

@@ -1,8 +1,18 @@
-var A 0x00
-var B 0x00
-loop A eq B
-    idle
+var true 0xabcdef
+var false 0x123456789
+var zero 0x0
+
+
+var - 0xfffffffffffffff
+var print 0x0
+var 0 0xfffffffffffffff
+
+var a 0x1
+if a zero 
+    set print true
+else
+    set print false
 end
 
 
-
+    

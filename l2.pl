@@ -145,6 +145,7 @@ for(my $i=0;$i<(scalar @lines);++$i){
     my @cmd = split(/\s+/,$line);
 
 
+
     if($cmd[0] eq "var" ){
 	my $vindex = get_var_index();
 	my $val = "0x0";
@@ -163,7 +164,7 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	my $end = pop(@endstack);
 	my %end = %{$end};
 	if( $end{type} eq "if" ){
-	    code_push({type=>"label", name=>$end{index},});
+	    code_push({type=>"endif", index=>$end{index},else=>$end{else},});
 	}elsif( $end{type} eq "proc" ){
 	    code_push({type=>"procend", index=>$end{index},name=>$end{index},});
 	    my $body = code_prevnamespace();
@@ -222,13 +223,20 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	push(@namespace,[]);
 	
 	my $end = pop(@endstack);
+print "debug.\$end = ".Dumper($end);
+	$end->{else} = "true";
+print "debug.\$end = ".Dumper($end);
+
+    
 	my %end = %{$end};
 	if( $end{type} eq "if" ){
-	    code_push({type=>"else", label=>$end{index},});
+	    code_push({type=>"else", index=>$end{index},});
 	}else{
 	    die "compilation error: expected 'if' before 'else'";
 	}
+#	$end->{else}="true";
 	push(@endstack,$end);
+print "debug.\@endstack = ".Dumper(\@endstack);
     }elsif($cmd[0] eq "proc"){
 	if(not $cmd[1]) {
 	    die "compilation error: no name of proc";
@@ -303,9 +311,26 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	push(@endstack, {type=>"loop",index=>$loopindex, vara => $vara, varb => $varb,opt=>$opt, });
 	code_push({type=>"loop",index=>$loopindex, vara => $vara, varb => $varb, opt=>$opt,});
 	push(@loopstack,{type=>"loop",index=>$loopindex, vara => $vara, varb => $varb,opt=>$opt, });
-print "debug.\@codenamespace = " .Dumper(\@codenamespace);
+#print "debug.\@codenamespace = " .Dumper(\@codenamespace);
     }elsif($cmd[0] eq "idle"){
 	code_push({type=>"idle",});
+    }elsif($cmd[0] eq "not"){
+	if( (scalar @cmd) != 3 ){ die "compilation error: wrong number of arguments (@cmd)";};
+	my $arg1 = get_index_of_variable($cmd[1]);
+	my $arg2 = get_index_of_variable($cmd[2]);
+	code_push({type=>"not", arg1=>$arg1, arg2=>$arg2,});	
+    }elsif($cmd[0] eq "or" ){
+	if( (scalar @cmd) != 4 ){ die "compilation error: wrong number of arguments (@cmd)";};
+	my $arg1 = get_index_of_variable($cmd[1]);
+	my $arg2 = get_index_of_variable($cmd[2]);
+	my $arg3 = get_index_of_variable($cmd[3]);
+	code_push({type=>"or", arg1=>$arg1, arg2=>$arg2, arg3=>$arg3,});	
+    }elsif($cmd[0] eq "and"){
+	if( (scalar @cmd) != 4 ){ die "compilation error: wrong number of arguments (@cmd)";};
+	my $arg1 = get_index_of_variable($cmd[1]);
+	my $arg2 = get_index_of_variable($cmd[2]);
+	my $arg3 = get_index_of_variable($cmd[3]);
+	code_push({type=>"and", arg1=>$arg1, arg2=>$arg2, arg3=>$arg3,});	
     }else{
 	print "unknown line '$line'\n";
     }
@@ -328,14 +353,31 @@ foreach my $var (@list) {
     if( ! $var->{code} ){
 	if( $var->{type} eq "label" ){
 	    $var->{code} =  ["$var->{name}: idle"];
+
 	}elsif ($var->{type} eq "if" ){
-	    $var->{code} = ["ifjmp $var->{arg1} $var->{arg2} $var->{index}"];
+	    $var->{code} = [	"ifjmp $var->{arg1} $var->{arg2} if-begin-$var->{index}",
+				"ifjmp zero zero if-else-$var->{index}",
+				"if-begin-$var->{index}: idle"];
+
+
 	}elsif ($var->{type} eq "idle" ){
 	    $var->{code} = [ "idle" ];
+
 	}elsif ($var->{type} eq "copy" ){
 	    $var->{code} = [ "copy $var->{arg1} $var->{arg2}" ];
+
 	}elsif ($var->{type} eq "else" ){
-	    $var->{code} = ["ifjmp zero zero $var->{label}"];
+	    $var->{code} = ["ifjmp zero zero if-end-$var->{index}",
+			    "if-else-$var->{index}: idle" ];
+
+	}elsif( $var->{type} eq "endif" ){
+	    if($var->{else}){
+		$var->{code} = ["if-end-$var->{index}:  idle" ];
+	    }else{
+		$var->{code} = ["if-else-$var->{index}: idle",
+				"if-end-$var->{index}:  idle" ]
+	    }
+
 	}elsif ($var->{type} eq "call" ){
 
 	    my @code;
@@ -368,7 +410,6 @@ foreach my $var (@list) {
 	    $var->{code} = [	"proc-return-$var->{index}: db 0x0",
 				"$var->{index}: idle"];
 	}elsif($var->{type} eq "loop"){
-print "debug.\$var = ".Dumper($var);
 	    if( $var->{opt} eq "not" ){
 		$var->{code} = ["loop-begin-$var->{index}: idle", 
 				"ifjmp $var->{vara} $var->{varb} loop-end-$var->{index}" ];
@@ -381,6 +422,12 @@ print "debug.\$var = ".Dumper($var);
 	}elsif($var->{type} eq "loopend"){
 	    $var->{code} = [ 	"ifjmp zero zero loop-begin-$var->{index}",
 				"loop-end-$var->{index}: idle" ];
+	}elsif($var->{type} eq "not" ){
+	    $var->{code} = [ "not $var->{arg1} $var->{arg2}" ];
+	}elsif($var->{type} eq "and" ){
+	    $var->{code} = [ "and $var->{arg1} $var->{arg2} $var->{arg3}" ];
+	}elsif($var->{type} eq "or" ){	
+	    $var->{code} = [ "or $var->{arg1} $var->{arg2} $var->{arg3}" ];
 	}else{
 	    die "compilation error: unknown line type '$var->{type}'";
 	}	
@@ -428,10 +475,10 @@ foreach my $l (@fullcode){
 
 
 #print "\@variables = " . Dumper(\@variables);
-print "\@procecures = " .  Dumper(\@procedures);
+#print "\@procecures = " .  Dumper(\@procedures);
 #print "\@maincode = " . Dumper(\@maincode);
 print "\@code = " . Dumper(\@code);
-print "\$maincode = ".Dumper($maincode);
+#print "\$maincode = ".Dumper($maincode);
 
 sub convert_to_hex()
 {

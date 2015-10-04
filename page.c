@@ -105,7 +105,7 @@ vbyte page_begin(vbyte address) {
 }
 
 void write_vbyte(vbyte address, vbyte value){
-printf("debug.write_vbyte(%016" PRIx64 ", %016" PRIx64 ")\n", address, value);
+//printf("debug.write_vbyte(%016" PRIx64 ", %016" PRIx64 ")\n", address, value);
     struct page *page = find_page(address);
     if( page == NULL ) {
 	page = new_page( page_begin(address) );
