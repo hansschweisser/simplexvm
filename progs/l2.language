@@ -32,3 +32,6 @@ end
 call name arg1:string ... 
 name:string arg1:string arg2:string ...
 
+loop var:string var:string
+
+end

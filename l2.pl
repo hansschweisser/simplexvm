@@ -27,6 +27,9 @@ sub proc_prevnamespace {
 proc_newnamespace();
 
 
+my @loopstack;
+
+
 my @codenamespace;
 sub code_push {
     my ($entry) = @_;
@@ -156,16 +159,23 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	push(@endstack,{type=>"begin",});
     }elsif($cmd[0] eq "end" ){
 	pop(@namespace);
+	if( (scalar @endstack) == 0) { die "compilation error: there is and 'end' but without beginning"; }
 	my $end = pop(@endstack);
 	my %end = %{$end};
 	if( $end{type} eq "if" ){
 	    code_push({type=>"label", name=>$end{index},});
-	}
-	if( $end{type} eq "proc" ){
+	}elsif( $end{type} eq "proc" ){
 	    code_push({type=>"procend", index=>$end{index},name=>$end{index},});
 	    my $body = code_prevnamespace();
 	    proc_prevnamespace();
 	    push(@procedures, { code=> $body, head=>$end,});
+	}elsif ($end{type} eq "loop" ){
+	    my $l = pop(@loopstack);
+	    code_push({type=>"loopend", index=>$l->{index},});
+#print "debug.\@codenamespace = ".Dumper(\@codenamespace);	    
+	    
+	}else{
+	    die "compilation error: unknown end of block ($end{type})";
 	}
     }elsif($cmd[0] eq "set" ){
 	if(! ($cmd[1] && $cmd[2]) ){
@@ -276,6 +286,24 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	if( $found == 0 ) { die "compilation error: unknown function $cmd[1]";}
 
 	code_push({type=>"call", name=>$cmd[1], index=>$inx, argin=>\@argin, argout=>\@argout, argprocin => \@procargin, argprocout => \@procargout,});
+    }elsif($cmd[0] eq "loop" ){
+	if( (scalar @cmd) != 4 ) { die "compilation error: wrong loop (@cmd)";}
+	my $opt = 1;
+	if( $cmd[2] eq "eq" ){
+	    $opt = "eq";
+	}elsif($cmd[2] eq "not"){
+	    $opt = "not";
+	}else{
+	    die "compilation error: unknown operation ($cmd[2]) in loop (@cmd)";
+	}	
+	my $vara = get_index_of_variable($cmd[1]);
+	my $varb = get_index_of_variable($cmd[3]);
+	my $loopindex = get_var_index();
+	var_newnamespace();
+	push(@endstack, {type=>"loop",index=>$loopindex, vara => $vara, varb => $varb,opt=>$opt, });
+	code_push({type=>"loop",index=>$loopindex, vara => $vara, varb => $varb, opt=>$opt,});
+	push(@loopstack,{type=>"loop",index=>$loopindex, vara => $vara, varb => $varb,opt=>$opt, });
+print "debug.\@codenamespace = " .Dumper(\@codenamespace);
     }elsif($cmd[0] eq "idle"){
 	code_push({type=>"idle",});
     }else{
@@ -309,7 +337,6 @@ foreach my $var (@list) {
 	}elsif ($var->{type} eq "else" ){
 	    $var->{code} = ["ifjmp zero zero $var->{label}"];
 	}elsif ($var->{type} eq "call" ){
-	    print "debug.call = ".Dumper($var);
 
 	    my @code;
 
@@ -340,6 +367,20 @@ foreach my $var (@list) {
 	}elsif($var->{type} eq "prochead" ) {
 	    $var->{code} = [	"proc-return-$var->{index}: db 0x0",
 				"$var->{index}: idle"];
+	}elsif($var->{type} eq "loop"){
+print "debug.\$var = ".Dumper($var);
+	    if( $var->{opt} eq "not" ){
+		$var->{code} = ["loop-begin-$var->{index}: idle", 
+				"ifjmp $var->{vara} $var->{varb} loop-end-$var->{index}" ];
+	    }elsif($var->{opt} eq "eq" ){
+		$var->{code} = ["loop-begin-$var->{index}: idle",
+				"ifjmp $var->{vara} $var->{varb} loop-begin-eq-$var->{index}",
+				"ifjmp zero zero loop-end-$var->{index}",  
+				"loop-begin-eq-$var->{index}: idle" ];
+	    }
+	}elsif($var->{type} eq "loopend"){
+	    $var->{code} = [ 	"ifjmp zero zero loop-begin-$var->{index}",
+				"loop-end-$var->{index}: idle" ];
 	}else{
 	    die "compilation error: unknown line type '$var->{type}'";
 	}	

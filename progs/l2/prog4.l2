@@ -1,3 +1,9 @@
-var a 0xabcdef
-var b
-set a b
+proc name -> C
+    set C 0x11
+end
+
+
+var A 
+call name  -> A
+
+

@@ -1,7 +1,8 @@
-proc name -> C
-    set C 0x11
+var A 0x00
+var B 0x00
+loop A eq B
+    idle
 end
 
 
-var A 
-call name  -> A
+
