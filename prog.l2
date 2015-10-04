@@ -1,18 +1,24 @@
-var true 0xabcdef
-var false 0x123456789
-var zero 0x0
-
-
-var - 0xfffffffffffffff
+var A 0x0
+var - 0xfffffffff
 var print 0x0
-var 0 0xfffffffffffffff
+var - 0xfffffffff
 
-var a 0x1
-if a zero 
-    set print true
-else
-    set print false
+
+switch A 
+    case 0x0
+	var print 0x777777
+	set print 0xaaaaaa
+    end
+    case 0x1
+	set print 0xbbbbbb
+    end
+    case 0x2
+	set print 0xccccccc
+    end
+    default 
+	set print 0xfffffff
+    end
 end
 
-
-    
+loop A eq A
+end

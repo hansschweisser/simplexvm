@@ -22,6 +22,16 @@ case value:(int|hex|bin|oct)
 else
 end
 
+switch A
+    case N
+	...
+    end
+    case 0x44
+	...
+    end
+end
+
+
 
 proc name:string 
 proc name:string arg1:string arg2:string ... 

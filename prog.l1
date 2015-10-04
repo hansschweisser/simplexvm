@@ -1,16 +1,39 @@
-ifjmp label0006 label0002 if-begin-label0007
-ifjmp zero zero if-else-label0007
-if-begin-label0007: idle
-copy label0000 label0004
-ifjmp zero zero if-end-label0007
-if-else-label0007: idle
-copy label0001 label0004
-if-end-label0007:  idle
+ifjmp label0006 label0000 case-begin-label0005
+ifjmp zero zero case-end-label0005
+case-begin-label0005: idle
+copy label0008 label0007
+ifjmp zero zero switch-end-label0004
+case-end-label0005: idle
+ifjmp label0010 label0000 case-begin-label0009
+ifjmp zero zero case-end-label0009
+case-begin-label0009: idle
+copy label0011 label0002
+ifjmp zero zero switch-end-label0004
+case-end-label0009: idle
+ifjmp label0013 label0000 case-begin-label0012
+ifjmp zero zero case-end-label0012
+case-begin-label0012: idle
+copy label0014 label0002
+ifjmp zero zero switch-end-label0004
+case-end-label0012: idle
+copy label0016 label0002
+switch-end-label0004: idle
+loop-begin-label0017: idle
+ifjmp label0000 label0000 loop-begin-eq-label0017
+ifjmp zero zero loop-end-label0017
+loop-begin-eq-label0017: idle
+ifjmp zero zero loop-begin-label0017
+loop-end-label0017: idle
 zero: db 0x0
-label0000: db 0xabcdef
-label0001: db 0x123456789
+label0000: db 0x0
+label0001: db 0xfffffffff
 label0002: db 0x0
-label0003: db 0xfffffffffffffff
-label0004: db 0x0
-label0005: db 0xfffffffffffffff
-label0006: db 0x1
+label0003: db 0xfffffffff
+label0006: db 0x0
+label0007: db 0x777777
+label0008: db 0xaaaaaa
+label0010: db 0x1
+label0011: db 0xbbbbbb
+label0013: db 0x2
+label0014: db 0xccccccc
+label0016: db 0xfffffff

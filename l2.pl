@@ -144,7 +144,7 @@ for(my $i=0;$i<(scalar @lines);++$i){
 
     my @cmd = split(/\s+/,$line);
 
-
+print "debug.\@cmd = @cmd\n";
 
     if($cmd[0] eq "var" ){
 	my $vindex = get_var_index();
@@ -173,8 +173,12 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	}elsif ($end{type} eq "loop" ){
 	    my $l = pop(@loopstack);
 	    code_push({type=>"loopend", index=>$l->{index},});
-#print "debug.\@codenamespace = ".Dumper(\@codenamespace);	    
-	    
+	}elsif($end{type} eq "case"){
+	    code_push({type=>"endcase",index=>$end->{index},switchindex=>$end->{switchindex},});
+	}elsif($end{type} eq "switch"){
+	    code_push({type=>"endswitch",index=>$end->{index},});
+	}elsif($end{type} eq "default" ){
+	    code_push({type=>"enddefault", index=>$end->{index},});
 	}else{
 	    die "compilation error: unknown end of block ($end{type})";
 	}
@@ -223,10 +227,7 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	push(@namespace,[]);
 	
 	my $end = pop(@endstack);
-print "debug.\$end = ".Dumper($end);
 	$end->{else} = "true";
-print "debug.\$end = ".Dumper($end);
-
     
 	my %end = %{$end};
 	if( $end{type} eq "if" ){
@@ -234,9 +235,7 @@ print "debug.\$end = ".Dumper($end);
 	}else{
 	    die "compilation error: expected 'if' before 'else'";
 	}
-#	$end->{else}="true";
 	push(@endstack,$end);
-print "debug.\@endstack = ".Dumper(\@endstack);
     }elsif($cmd[0] eq "proc"){
 	if(not $cmd[1]) {
 	    die "compilation error: no name of proc";
@@ -311,7 +310,6 @@ print "debug.\@endstack = ".Dumper(\@endstack);
 	push(@endstack, {type=>"loop",index=>$loopindex, vara => $vara, varb => $varb,opt=>$opt, });
 	code_push({type=>"loop",index=>$loopindex, vara => $vara, varb => $varb, opt=>$opt,});
 	push(@loopstack,{type=>"loop",index=>$loopindex, vara => $vara, varb => $varb,opt=>$opt, });
-#print "debug.\@codenamespace = " .Dumper(\@codenamespace);
     }elsif($cmd[0] eq "idle"){
 	code_push({type=>"idle",});
     }elsif($cmd[0] eq "not"){
@@ -331,6 +329,42 @@ print "debug.\@endstack = ".Dumper(\@endstack);
 	my $arg2 = get_index_of_variable($cmd[2]);
 	my $arg3 = get_index_of_variable($cmd[3]);
 	code_push({type=>"and", arg1=>$arg1, arg2=>$arg2, arg3=>$arg3,});	
+    }elsif($cmd[0] eq "switch"){
+	if( not $cmd[1] ) { die "compilation error: no argument to 'switch'";}
+	my $vi = get_index_of_variable($cmd[1]);
+	var_newnamespace();
+	my $index = get_var_index();
+	push(@endstack,{type=>"switch", index=>$index, arg=>$vi,});
+	code_push({type=>"switch", index=>$index, arg=>$vi,});
+    }elsif($cmd[0] eq "case"){	
+	if( not $cmd[1]) { die "compilation error: no argument to 'case'";}
+	var_newnamespace();
+	my $end = pop(@endstack);
+	if( $end->{type} ne "switch" ) { die "compilation error: 'case' not inside 'switch'";}
+	my $switchindex = $end->{index};
+	my $switcharg = $end->{arg};
+	push(@endstack,$end);
+
+	my $arg;
+	my $caseindex = get_var_index();
+	if( is_variable($cmd[1]) ){
+	    $arg = $cmd[1];
+	}else{
+	    $arg = get_tmp_var($cmd[1]);	    
+	}
+	push(@endstack,{type=>"case", index=>$caseindex, switchindex=>$switchindex ,arg=>$arg,switcharg=>$switcharg,});
+	code_push({type=>"case", index=>$caseindex, switchindex=>$switchindex ,arg=>$arg,switcharg=>$switcharg,});
+    }elsif($cmd[0] eq "default" ){
+	my $end = pop(@endstack);
+	var_newnamespace();
+	if($end->{type} ne "switch" ) { die "compilation error: 'default' not in 'switch'";}
+	my $switchindex = $end->{index};
+	push(@endstack,$end);
+	my $inx = get_var_index();
+	push(@endstack,{type=>"default", index=>$inx, switchindex=>$switchindex,});
+	code_push({type=>"default", index=>$inx, switchindex=>$switchindex,});
+print "debug.\@endstack = ".Dumper(\@endstack);
+
     }else{
 	print "unknown line '$line'\n";
     }
@@ -428,6 +462,28 @@ foreach my $var (@list) {
 	    $var->{code} = [ "and $var->{arg1} $var->{arg2} $var->{arg3}" ];
 	}elsif($var->{type} eq "or" ){	
 	    $var->{code} = [ "or $var->{arg1} $var->{arg2} $var->{arg3}" ];
+	}elsif($var->{type} eq "switch"){
+	    #$var->{code} = [ "" ];
+	}elsif($var->{type} eq "case"){
+	    my $sinx = $var->{switchindex};
+	    my $cinx = $var->{index};
+	    my $arg= $var->{arg};
+	    my $swarg = $var->{switcharg};
+	    $var->{code} = ["ifjmp $arg $swarg case-begin-$cinx",
+			    "ifjmp zero zero case-end-$cinx",
+			    "case-begin-$cinx: idle" ];
+	}elsif($var->{type} eq "endcase"){
+	    my $switchindex = $var->{switchindex};
+	    my $caseindex = $var->{index};
+	    $var->{code} = ["ifjmp zero zero switch-end-$switchindex",
+			    "case-end-$caseindex: idle" ];
+	}elsif($var->{type} eq "default" ){
+	    #$var->{code} = [ "" ];
+	}elsif($var->{type} eq "enddefault"){
+	    #$var->{code} = [ "" ];	    
+	}elsif($var->{type} eq "endswitch"){
+	    my $index = $var->{index};
+	    $var->{code} = [ "switch-end-$index: idle" ];
 	}else{
 	    die "compilation error: unknown line type '$var->{type}'";
 	}	
@@ -437,12 +493,16 @@ return @list;
 }
 
 my $maincode = code_prevnamespace();
+
+print "debug.\$maincode = ".Dumper($maincode);
+
 my @code = generate_code($maincode);
 
 
 my @maincode;
 my $code;
 foreach my $var (@code) {
+    if(not $var->{code} ) { next; }
     push(@maincode,$var->{code});
 }
 
@@ -451,6 +511,7 @@ my @proccode;
 foreach my $f (@procedures) {
 
     generate_code($f->{code});
+    if( not $f->{code} ) { next; }
     foreach my $l ( @{$f->{code}}){
 	push(@proccode,$l->{code});
     }
