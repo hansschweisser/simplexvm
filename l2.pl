@@ -142,10 +142,9 @@ for(my $i=0;$i<(scalar @lines);++$i){
 
     $line =~ s/^\s+|\s+$//g;
 
+#print "debug.\@codenamespace = " .Dumper(\@codenamespace);
+
     my @cmd = split(/\s+/,$line);
-
-print "debug.\@cmd = @cmd\n";
-
     if($cmd[0] eq "var" ){
 	my $vindex = get_var_index();
 	my $val = "0x0";
@@ -259,10 +258,10 @@ print "debug.\@cmd = @cmd\n";
 	    push(@variables,{name=>$cmd[$a],index=>$vi,value=>"0x0",}); 
 	    var_push({name => $cmd[$a], index=>$vi, });
 	}
-	    proc_push({name=>$cmd[1], index=>$procindex,});
-	    proc_newnamespace();
-	    push(@endstack, {type=>"proc", argsin=>\@argin, argsout=>\@argout, index=>$procindex,name=>$cmd[1], argindexin=>\@argindexin, argindexout => \@argindexout,});
-	    code_push(  {type=>"prochead", argsin=>\@argin, argsout=>\@argout, index=>$procindex,name=>$cmd[1], argindexin=>\@argindexin, argindexout => \@argindexout,});
+	proc_push({name=>$cmd[1], index=>$procindex,});
+	proc_newnamespace();
+	push(@endstack, {type=>"proc", argsin=>\@argin, argsout=>\@argout, index=>$procindex,name=>$cmd[1], argindexin=>\@argindexin, argindexout => \@argindexout,});
+	code_push(  {type=>"prochead", argsin=>\@argin, argsout=>\@argout, index=>$procindex,name=>$cmd[1], argindexin=>\@argindexin, argindexout => \@argindexout,});
 	
     }elsif($cmd[0] eq "call"){
 	if( not $cmd[1] ) {
@@ -363,7 +362,6 @@ print "debug.\@cmd = @cmd\n";
 	my $inx = get_var_index();
 	push(@endstack,{type=>"default", index=>$inx, switchindex=>$switchindex,});
 	code_push({type=>"default", index=>$inx, switchindex=>$switchindex,});
-print "debug.\@endstack = ".Dumper(\@endstack);
 
     }else{
 	print "unknown line '$line'\n";
@@ -463,7 +461,7 @@ foreach my $var (@list) {
 	}elsif($var->{type} eq "or" ){	
 	    $var->{code} = [ "or $var->{arg1} $var->{arg2} $var->{arg3}" ];
 	}elsif($var->{type} eq "switch"){
-	    #$var->{code} = [ "" ];
+	#    $var->{code} = [ "idle" ];
 	}elsif($var->{type} eq "case"){
 	    my $sinx = $var->{switchindex};
 	    my $cinx = $var->{index};
@@ -494,7 +492,7 @@ return @list;
 
 my $maincode = code_prevnamespace();
 
-print "debug.\$maincode = ".Dumper($maincode);
+#print "debug.\$maincode = ".Dumper($maincode);
 
 my @code = generate_code($maincode);
 
@@ -519,11 +517,17 @@ foreach my $f (@procedures) {
 
 my @fullcode;
 foreach my $l (@maincode){
+    if( not $l ) { next; }
     push(@fullcode,@{$l});
 }
+
+#print "debug.\@proccode = " . Dumper(\@proccode);
+
 foreach my $l (@proccode){
+    if( not $l ) { next; }
     push(@fullcode,@{$l});
 }
+#print "debug.\@fullcode =".Dumper(\@proccode);
 
 foreach my $l (@fullcode){
     $code .= $l . "\n";
@@ -535,10 +539,11 @@ foreach my $l (@fullcode){
 #print "\@proccode = " . Dumper(\@proccode);
 
 
+
 #print "\@variables = " . Dumper(\@variables);
 #print "\@procecures = " .  Dumper(\@procedures);
 #print "\@maincode = " . Dumper(\@maincode);
-print "\@code = " . Dumper(\@code);
+#print "\@code = " . Dumper(\@code);
 #print "\$maincode = ".Dumper($maincode);
 
 sub convert_to_hex()

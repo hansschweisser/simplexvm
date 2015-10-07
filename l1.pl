@@ -16,7 +16,8 @@ my @lines = split(/\n/,$output);
 my $i = 0;
 my $curraddr = 0;
 foreach my $line (@lines) {
-#print "debug.line = /$line/\n";
+print "debug.line = /$line/\n";
+print "debug.before.\%labels = ".Dumper(\%labels);
     my @labels = split(/:/, $line);
     my $cmd;
     my $label;
@@ -29,13 +30,12 @@ foreach my $line (@lines) {
     }elsif ( $line =~ /^[ \t]*$/ ) {
 	next;
     }else{
-	print "compilatino error: unrecognise line [$line]\n";
+	print "compilation error: unrecognise line [$line]\n";
 	die();
     }
     $label =~ s/^\s+|\s+$//g;
     $cmd =~ s/^\s+|\s+$//g;
 
-#print "debug. label=$label, cmd=$cmd\n";
 
     my @args = split(/[ \t]+/, $cmd );
     
@@ -200,6 +200,7 @@ foreach my $line (@lines) {
 	    if( $labels{$label} ) { 
 		die("compilation error: label duplicate $label\n");
 	    }
+print "debug.set_label_into_hash = $label\n";
 	    $labels{$label} = $curraddr;
 	}
 	$curraddr+= 1;
@@ -241,24 +242,33 @@ foreach my $line (@lines) {
     }    
 
     $i++;
+print "debug.after.\%labels = ".Dumper(\%labels);
 }
 
 my @binary;
 
 foreach my $metaline (@metalines) {
     my %metaline = %{$metaline};
+print "debug.before.\%metaline = ".Dumper(\%metaline);
+print "debug.\%labels = ".Dumper(\%labels);
+
     if( $metaline{args} ) {
 	my @a = @{$metaline{args}};
+print "debug.\@a = @a\n";
 	foreach my $a (@a) {
+print "debug.\$a = $a \n";
 	    if( $labels{$a} ) {
 		push(@$metaline{code}, $labels{$a});
 	    }elsif( $a =~ /0x[0-9a-fA-F]+/ ) {
 		push(@$metaline{code}, hex($a));
 	    }else{
-		die("compilatino error: unknown label $a\n");
+print "debug.die.\%labels = ".Dumper(\%labels);
+print "debug.die.\%metaline = ".Dumper(\%metaline);
+		die("compilation error: unknown label $a (line $metaline{nr})\n");
 	    }
 	} 
-    }	
+    }
+print "debug.after.\$metaline = " .Dumper($metaline);	
     @binary = (@binary,  @{$metaline{code}});
 
 }

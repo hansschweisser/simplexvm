@@ -1,0 +1,8 @@
+
+
+db 0x0
+
+test: db 0x0
+zero : db 0x0
+ifjmp test zero next
+next : db 0x0

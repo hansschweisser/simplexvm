@@ -1,24 +1,18 @@
-var A 0x0
-var - 0xfffffffff
-var print 0x0
-var - 0xfffffffff
-
-
-switch A 
-    case 0x0
-	var print 0x777777
-	set print 0xaaaaaa
-    end
-    case 0x1
-	set print 0xbbbbbb
-    end
-    case 0x2
-	set print 0xccccccc
-    end
-    default 
-	set print 0xfffffff
+proc name A -> B
+    switch A
+	case 0x0
+	end
     end
 end
 
-loop A eq A
+var A
+    switch A
+	case 0x1
+	end
+    end
+
+var a
+loop a eq a
 end
+
+
