@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <inttypes.h>
+#include "trap.h"
 
 struct page * global_page_list = NULL;
 
@@ -93,12 +94,34 @@ struct page* find_page(vbyte address){
 
 
 vbyte read_vbyte(vbyte address){
+    vbyte value;
     struct page *page = find_page(address);
     if( page == NULL ) 
-	return 0; 
-    return *( page->p + ( address - page->begin ) );
+	value = 0;
+    else
+	value = *( page->p + ( address - page->begin ) );    
     
+    execute_traps(address, value, value, "read");
+
+    return value;
+
 }
+
+
+vbyte read_vbyte_notrap(vbyte address){
+    vbyte value;
+    struct page *page = find_page(address);
+    if( page == NULL ) 
+	value = 0;
+    else
+	value = *( page->p + ( address - page->begin ) );    
+    
+
+    return value;
+
+}
+
+
 
 vbyte page_begin(vbyte address) {
     return ((address>>PAGE_SIZE)<<PAGE_SIZE);
@@ -106,6 +129,8 @@ vbyte page_begin(vbyte address) {
 
 void write_vbyte(vbyte address, vbyte value){
 //printf("debug.write_vbyte(%016" PRIx64 ", %016" PRIx64 ")\n", address, value);
+
+    vbyte old;
     struct page *page = find_page(address);
     if( page == NULL ) {
 	page = new_page( page_begin(address) );
@@ -113,7 +138,10 @@ void write_vbyte(vbyte address, vbyte value){
 	    bug(); // cannot allocate memory
 	add_page(page);	
     }
+    old = *(page->p + (address - page->begin) ) ;
     *(page->p + (address - page->begin) ) = value;
+    
+    execute_traps(address,old,value,"write");
 }
 
 

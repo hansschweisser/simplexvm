@@ -2,6 +2,11 @@
 use Data::Dumper;
 use strict;
 
+#
+# TODO
+#
+# - checking proc argument number
+#
 
 my $file = $ARGV[0];
 open FILE, $file or die "cannot open file";
@@ -311,6 +316,8 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	push(@loopstack,{type=>"loop",index=>$loopindex, vara => $vara, varb => $varb,opt=>$opt, });
     }elsif($cmd[0] eq "idle"){
 	code_push({type=>"idle",});
+    }elsif($cmd[0] eq "exit"){
+	code_push({type=>"exit",});
     }elsif($cmd[0] eq "not"){
 	if( (scalar @cmd) != 3 ){ die "compilation error: wrong number of arguments (@cmd)";};
 	my $arg1 = get_index_of_variable($cmd[1]);
@@ -394,7 +401,8 @@ foreach my $var (@list) {
 
 	}elsif ($var->{type} eq "idle" ){
 	    $var->{code} = [ "idle" ];
-
+	}elsif ($var->{type} eq "exit" ){
+	    $var->{code} = [ "exit" ];
 	}elsif ($var->{type} eq "copy" ){
 	    $var->{code} = [ "copy $var->{arg1} $var->{arg2}" ];
 

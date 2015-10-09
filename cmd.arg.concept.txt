@@ -1,0 +1,18 @@
+vm file
+
+
+[file]
+load /addr
+bin bin bin bin 
+bin bin
+end
+
+load /addr 
+bin bin
+end
+
+
+trap r|w|rw /addr /addr print|exit|
+
+dump /addr /addr
+dump all

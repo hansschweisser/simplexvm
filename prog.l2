@@ -1,18 +1,5 @@
-proc name A -> B
-    switch A
-	case 0x0
-	end
-    end
-end
-
-var A
-    switch A
-	case 0x1
-	end
-    end
-
-var a
-loop a eq a
-end
-
-
+var -1 0xfffffffff
+var p 0x0
+var -2 0xfffffffff
+var n 0x8
+call power2 n p

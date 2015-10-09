@@ -25,6 +25,8 @@ struct page
 
 
 vbyte read_vbyte(vbyte address);
+vbyte read_vbyte_notrap(vbyte address);
+
 void write_vbyte(vbyte address,vbyte value);
 
 void show_page_list();

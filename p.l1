@@ -1,0 +1,531 @@
+copy label0199 proc-var-A-label0000
+copy return-var-label0000 proc-return-label0000 
+ifjmp zero zero label0000
+return-var-label0000: db call-return-label0000
+call-return-label0000: idle
+copy proc-var-B-label0000 label0197
+zero: db 0x0
+proc-var-A-label0000: db 0x0
+proc-var-B-label0000: db 0x0
+label0003: db 0x0
+label0004: db 0x1
+label0006: db 0x1
+label0007: db 0x2
+label0009: db 0x2
+label0010: db 0x4
+label0012: db 0x3
+label0013: db 0x8
+label0015: db 0x4
+label0016: db 0x10
+label0018: db 0x5
+label0019: db 0x20
+label0021: db 0x6
+label0022: db 0x40
+label0024: db 0x7
+label0025: db 0x80
+label0027: db 0x8
+label0028: db 0x100
+label0030: db 0x9
+label0031: db 0x200
+label0033: db 0xa
+label0034: db 0x400
+label0036: db 0xb
+label0037: db 0x800
+label0039: db 0xc
+label0040: db 0x1000
+label0042: db 0xd
+label0043: db 0x2000
+label0045: db 0xe
+label0046: db 0x4000
+label0048: db 0xf
+label0049: db 0x8000
+label0051: db 0x10
+label0052: db 0x10000
+label0054: db 0x11
+label0055: db 0x20000
+label0057: db 0x12
+label0058: db 0x40000
+label0060: db 0x13
+label0061: db 0x80000
+label0063: db 0x14
+label0064: db 0x100000
+label0066: db 0x15
+label0067: db 0x200000
+label0069: db 0x16
+label0070: db 0x400000
+label0072: db 0x17
+label0073: db 0x800000
+label0075: db 0x18
+label0076: db 0x1000000
+label0078: db 0x19
+label0079: db 0x2000000
+label0081: db 0x1a
+label0082: db 0x4000000
+label0084: db 0x1b
+label0085: db 0x8000000
+label0087: db 0x1c
+label0088: db 0x10000000
+label0090: db 0x1d
+label0091: db 0x20000000
+label0093: db 0x1e
+label0094: db 0x40000000
+label0096: db 0x1f
+label0097: db 0x80000000
+label0099: db 0x20
+label0100: db 0x100000000
+label0102: db 0x21
+label0103: db 0x200000000
+label0105: db 0x22
+label0106: db 0x400000000
+label0108: db 0x23
+label0109: db 0x800000000
+label0111: db 0x24
+label0112: db 0x1000000000
+label0114: db 0x25
+label0115: db 0x2000000000
+label0117: db 0x26
+label0118: db 0x4000000000
+label0120: db 0x27
+label0121: db 0x8000000000
+label0123: db 0x28
+label0124: db 0x10000000000
+label0126: db 0x29
+label0127: db 0x20000000000
+label0129: db 0x2a
+label0130: db 0x40000000000
+label0132: db 0x2b
+label0133: db 0x80000000000
+label0135: db 0x2c
+label0136: db 0x100000000000
+label0138: db 0x2d
+label0139: db 0x200000000000
+label0141: db 0x2e
+label0142: db 0x400000000000
+label0144: db 0x2f
+label0145: db 0x800000000000
+label0147: db 0x30
+label0148: db 0x1000000000000
+label0150: db 0x31
+label0151: db 0x2000000000000
+label0153: db 0x32
+label0154: db 0x4000000000000
+label0156: db 0x33
+label0157: db 0x8000000000000
+label0159: db 0x34
+label0160: db 0x10000000000000
+label0162: db 0x35
+label0163: db 0x20000000000000
+label0165: db 0x36
+label0166: db 0x40000000000000
+label0168: db 0x37
+label0169: db 0x80000000000000
+label0171: db 0x38
+label0172: db 0x100000000000000
+label0174: db 0x39
+label0175: db 0x200000000000000
+label0177: db 0x3a
+label0178: db 0x400000000000000
+label0180: db 0x3b
+label0181: db 0x800000000000000
+label0183: db 0x3c
+label0184: db 0x1000000000000000
+label0186: db 0x3d
+label0187: db 0x2000000000000000
+label0189: db 0x3e
+label0190: db 0x4000000000000000
+label0192: db 0x3f
+label0193: db 0x8000000000000000
+label0195: db 0x0
+label0196: db 0xfffffffff
+label0197: db 0x0
+label0198: db 0xfffffffff
+label0199: db 0x8
+proc-return-label0000: db 0x0
+label0000: idle
+ifjmp label0003 proc-var-A-label0000 case-begin-label0002
+ifjmp zero zero case-end-label0002
+case-begin-label0002: idle
+copy label0004 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0002: idle
+ifjmp label0006 proc-var-A-label0000 case-begin-label0005
+ifjmp zero zero case-end-label0005
+case-begin-label0005: idle
+copy label0007 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0005: idle
+ifjmp label0009 proc-var-A-label0000 case-begin-label0008
+ifjmp zero zero case-end-label0008
+case-begin-label0008: idle
+copy label0010 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0008: idle
+ifjmp label0012 proc-var-A-label0000 case-begin-label0011
+ifjmp zero zero case-end-label0011
+case-begin-label0011: idle
+copy label0013 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0011: idle
+ifjmp label0015 proc-var-A-label0000 case-begin-label0014
+ifjmp zero zero case-end-label0014
+case-begin-label0014: idle
+copy label0016 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0014: idle
+ifjmp label0018 proc-var-A-label0000 case-begin-label0017
+ifjmp zero zero case-end-label0017
+case-begin-label0017: idle
+copy label0019 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0017: idle
+ifjmp label0021 proc-var-A-label0000 case-begin-label0020
+ifjmp zero zero case-end-label0020
+case-begin-label0020: idle
+copy label0022 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0020: idle
+ifjmp label0024 proc-var-A-label0000 case-begin-label0023
+ifjmp zero zero case-end-label0023
+case-begin-label0023: idle
+copy label0025 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0023: idle
+ifjmp label0027 proc-var-A-label0000 case-begin-label0026
+ifjmp zero zero case-end-label0026
+case-begin-label0026: idle
+copy label0028 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0026: idle
+ifjmp label0030 proc-var-A-label0000 case-begin-label0029
+ifjmp zero zero case-end-label0029
+case-begin-label0029: idle
+copy label0031 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0029: idle
+ifjmp label0033 proc-var-A-label0000 case-begin-label0032
+ifjmp zero zero case-end-label0032
+case-begin-label0032: idle
+copy label0034 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0032: idle
+ifjmp label0036 proc-var-A-label0000 case-begin-label0035
+ifjmp zero zero case-end-label0035
+case-begin-label0035: idle
+copy label0037 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0035: idle
+ifjmp label0039 proc-var-A-label0000 case-begin-label0038
+ifjmp zero zero case-end-label0038
+case-begin-label0038: idle
+copy label0040 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0038: idle
+ifjmp label0042 proc-var-A-label0000 case-begin-label0041
+ifjmp zero zero case-end-label0041
+case-begin-label0041: idle
+copy label0043 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0041: idle
+ifjmp label0045 proc-var-A-label0000 case-begin-label0044
+ifjmp zero zero case-end-label0044
+case-begin-label0044: idle
+copy label0046 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0044: idle
+ifjmp label0048 proc-var-A-label0000 case-begin-label0047
+ifjmp zero zero case-end-label0047
+case-begin-label0047: idle
+copy label0049 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0047: idle
+ifjmp label0051 proc-var-A-label0000 case-begin-label0050
+ifjmp zero zero case-end-label0050
+case-begin-label0050: idle
+copy label0052 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0050: idle
+ifjmp label0054 proc-var-A-label0000 case-begin-label0053
+ifjmp zero zero case-end-label0053
+case-begin-label0053: idle
+copy label0055 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0053: idle
+ifjmp label0057 proc-var-A-label0000 case-begin-label0056
+ifjmp zero zero case-end-label0056
+case-begin-label0056: idle
+copy label0058 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0056: idle
+ifjmp label0060 proc-var-A-label0000 case-begin-label0059
+ifjmp zero zero case-end-label0059
+case-begin-label0059: idle
+copy label0061 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0059: idle
+ifjmp label0063 proc-var-A-label0000 case-begin-label0062
+ifjmp zero zero case-end-label0062
+case-begin-label0062: idle
+copy label0064 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0062: idle
+ifjmp label0066 proc-var-A-label0000 case-begin-label0065
+ifjmp zero zero case-end-label0065
+case-begin-label0065: idle
+copy label0067 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0065: idle
+ifjmp label0069 proc-var-A-label0000 case-begin-label0068
+ifjmp zero zero case-end-label0068
+case-begin-label0068: idle
+copy label0070 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0068: idle
+ifjmp label0072 proc-var-A-label0000 case-begin-label0071
+ifjmp zero zero case-end-label0071
+case-begin-label0071: idle
+copy label0073 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0071: idle
+ifjmp label0075 proc-var-A-label0000 case-begin-label0074
+ifjmp zero zero case-end-label0074
+case-begin-label0074: idle
+copy label0076 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0074: idle
+ifjmp label0078 proc-var-A-label0000 case-begin-label0077
+ifjmp zero zero case-end-label0077
+case-begin-label0077: idle
+copy label0079 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0077: idle
+ifjmp label0081 proc-var-A-label0000 case-begin-label0080
+ifjmp zero zero case-end-label0080
+case-begin-label0080: idle
+copy label0082 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0080: idle
+ifjmp label0084 proc-var-A-label0000 case-begin-label0083
+ifjmp zero zero case-end-label0083
+case-begin-label0083: idle
+copy label0085 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0083: idle
+ifjmp label0087 proc-var-A-label0000 case-begin-label0086
+ifjmp zero zero case-end-label0086
+case-begin-label0086: idle
+copy label0088 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0086: idle
+ifjmp label0090 proc-var-A-label0000 case-begin-label0089
+ifjmp zero zero case-end-label0089
+case-begin-label0089: idle
+copy label0091 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0089: idle
+ifjmp label0093 proc-var-A-label0000 case-begin-label0092
+ifjmp zero zero case-end-label0092
+case-begin-label0092: idle
+copy label0094 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0092: idle
+ifjmp label0096 proc-var-A-label0000 case-begin-label0095
+ifjmp zero zero case-end-label0095
+case-begin-label0095: idle
+copy label0097 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0095: idle
+ifjmp label0099 proc-var-A-label0000 case-begin-label0098
+ifjmp zero zero case-end-label0098
+case-begin-label0098: idle
+copy label0100 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0098: idle
+ifjmp label0102 proc-var-A-label0000 case-begin-label0101
+ifjmp zero zero case-end-label0101
+case-begin-label0101: idle
+copy label0103 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0101: idle
+ifjmp label0105 proc-var-A-label0000 case-begin-label0104
+ifjmp zero zero case-end-label0104
+case-begin-label0104: idle
+copy label0106 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0104: idle
+ifjmp label0108 proc-var-A-label0000 case-begin-label0107
+ifjmp zero zero case-end-label0107
+case-begin-label0107: idle
+copy label0109 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0107: idle
+ifjmp label0111 proc-var-A-label0000 case-begin-label0110
+ifjmp zero zero case-end-label0110
+case-begin-label0110: idle
+copy label0112 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0110: idle
+ifjmp label0114 proc-var-A-label0000 case-begin-label0113
+ifjmp zero zero case-end-label0113
+case-begin-label0113: idle
+copy label0115 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0113: idle
+ifjmp label0117 proc-var-A-label0000 case-begin-label0116
+ifjmp zero zero case-end-label0116
+case-begin-label0116: idle
+copy label0118 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0116: idle
+ifjmp label0120 proc-var-A-label0000 case-begin-label0119
+ifjmp zero zero case-end-label0119
+case-begin-label0119: idle
+copy label0121 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0119: idle
+ifjmp label0123 proc-var-A-label0000 case-begin-label0122
+ifjmp zero zero case-end-label0122
+case-begin-label0122: idle
+copy label0124 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0122: idle
+ifjmp label0126 proc-var-A-label0000 case-begin-label0125
+ifjmp zero zero case-end-label0125
+case-begin-label0125: idle
+copy label0127 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0125: idle
+ifjmp label0129 proc-var-A-label0000 case-begin-label0128
+ifjmp zero zero case-end-label0128
+case-begin-label0128: idle
+copy label0130 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0128: idle
+ifjmp label0132 proc-var-A-label0000 case-begin-label0131
+ifjmp zero zero case-end-label0131
+case-begin-label0131: idle
+copy label0133 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0131: idle
+ifjmp label0135 proc-var-A-label0000 case-begin-label0134
+ifjmp zero zero case-end-label0134
+case-begin-label0134: idle
+copy label0136 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0134: idle
+ifjmp label0138 proc-var-A-label0000 case-begin-label0137
+ifjmp zero zero case-end-label0137
+case-begin-label0137: idle
+copy label0139 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0137: idle
+ifjmp label0141 proc-var-A-label0000 case-begin-label0140
+ifjmp zero zero case-end-label0140
+case-begin-label0140: idle
+copy label0142 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0140: idle
+ifjmp label0144 proc-var-A-label0000 case-begin-label0143
+ifjmp zero zero case-end-label0143
+case-begin-label0143: idle
+copy label0145 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0143: idle
+ifjmp label0147 proc-var-A-label0000 case-begin-label0146
+ifjmp zero zero case-end-label0146
+case-begin-label0146: idle
+copy label0148 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0146: idle
+ifjmp label0150 proc-var-A-label0000 case-begin-label0149
+ifjmp zero zero case-end-label0149
+case-begin-label0149: idle
+copy label0151 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0149: idle
+ifjmp label0153 proc-var-A-label0000 case-begin-label0152
+ifjmp zero zero case-end-label0152
+case-begin-label0152: idle
+copy label0154 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0152: idle
+ifjmp label0156 proc-var-A-label0000 case-begin-label0155
+ifjmp zero zero case-end-label0155
+case-begin-label0155: idle
+copy label0157 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0155: idle
+ifjmp label0159 proc-var-A-label0000 case-begin-label0158
+ifjmp zero zero case-end-label0158
+case-begin-label0158: idle
+copy label0160 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0158: idle
+ifjmp label0162 proc-var-A-label0000 case-begin-label0161
+ifjmp zero zero case-end-label0161
+case-begin-label0161: idle
+copy label0163 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0161: idle
+ifjmp label0165 proc-var-A-label0000 case-begin-label0164
+ifjmp zero zero case-end-label0164
+case-begin-label0164: idle
+copy label0166 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0164: idle
+ifjmp label0168 proc-var-A-label0000 case-begin-label0167
+ifjmp zero zero case-end-label0167
+case-begin-label0167: idle
+copy label0169 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0167: idle
+ifjmp label0171 proc-var-A-label0000 case-begin-label0170
+ifjmp zero zero case-end-label0170
+case-begin-label0170: idle
+copy label0172 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0170: idle
+ifjmp label0174 proc-var-A-label0000 case-begin-label0173
+ifjmp zero zero case-end-label0173
+case-begin-label0173: idle
+copy label0175 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0173: idle
+ifjmp label0177 proc-var-A-label0000 case-begin-label0176
+ifjmp zero zero case-end-label0176
+case-begin-label0176: idle
+copy label0178 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0176: idle
+ifjmp label0180 proc-var-A-label0000 case-begin-label0179
+ifjmp zero zero case-end-label0179
+case-begin-label0179: idle
+copy label0181 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0179: idle
+ifjmp label0183 proc-var-A-label0000 case-begin-label0182
+ifjmp zero zero case-end-label0182
+case-begin-label0182: idle
+copy label0184 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0182: idle
+ifjmp label0186 proc-var-A-label0000 case-begin-label0185
+ifjmp zero zero case-end-label0185
+case-begin-label0185: idle
+copy label0187 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0185: idle
+ifjmp label0189 proc-var-A-label0000 case-begin-label0188
+ifjmp zero zero case-end-label0188
+case-begin-label0188: idle
+copy label0190 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0188: idle
+ifjmp label0192 proc-var-A-label0000 case-begin-label0191
+ifjmp zero zero case-end-label0191
+case-begin-label0191: idle
+copy label0193 proc-var-B-label0000
+ifjmp zero zero switch-end-label0001
+case-end-label0191: idle
+copy label0195 proc-var-B-label0000
+switch-end-label0001: idle
+ifjmp2 zero zero proc-return-label0000

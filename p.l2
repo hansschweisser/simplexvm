@@ -1,0 +1,205 @@
+proc power2 A -> B
+    switch A
+    case 0x0
+	set B 0x1
+    end
+    case 0x1
+	set B 0x2
+    end
+    case 0x2
+	set B 0x4
+    end
+    case 0x3
+	set B 0x8
+    end
+    case 0x4
+	set B 0x10
+    end
+    case 0x5
+	set B 0x20
+    end
+    case 0x6
+	set B 0x40
+    end
+    case 0x7
+	set B 0x80
+    end
+    case 0x8
+	set B 0x100
+    end
+    case 0x9
+	set B 0x200
+    end
+    case 0xa
+	set B 0x400
+    end
+    case 0xb
+	set B 0x800
+    end
+    case 0xc
+	set B 0x1000
+    end
+    case 0xd
+	set B 0x2000
+    end
+    case 0xe
+	set B 0x4000
+    end
+    case 0xf
+	set B 0x8000
+    end
+    case 0x10
+	set B 0x10000
+    end
+    case 0x11
+	set B 0x20000
+    end
+    case 0x12
+	set B 0x40000
+    end
+    case 0x13
+	set B 0x80000
+    end
+    case 0x14
+	set B 0x100000
+    end
+    case 0x15
+	set B 0x200000
+    end
+    case 0x16
+	set B 0x400000
+    end
+    case 0x17
+	set B 0x800000
+    end
+    case 0x18
+	set B 0x1000000
+    end
+    case 0x19
+	set B 0x2000000
+    end
+    case 0x1a
+	set B 0x4000000
+    end
+    case 0x1b
+	set B 0x8000000
+    end
+    case 0x1c
+	set B 0x10000000
+    end
+    case 0x1d
+	set B 0x20000000
+    end
+    case 0x1e
+	set B 0x40000000
+    end
+    case 0x1f
+	set B 0x80000000
+    end
+    case 0x20
+	set B 0x100000000
+    end
+    case 0x21
+	set B 0x200000000
+    end
+    case 0x22
+	set B 0x400000000
+    end
+    case 0x23
+	set B 0x800000000
+    end
+    case 0x24
+	set B 0x1000000000
+    end
+    case 0x25
+	set B 0x2000000000
+    end
+    case 0x26
+	set B 0x4000000000
+    end
+    case 0x27
+	set B 0x8000000000
+    end
+    case 0x28
+	set B 0x10000000000
+    end
+    case 0x29
+	set B 0x20000000000
+    end
+    case 0x2a
+	set B 0x40000000000
+    end
+    case 0x2b
+	set B 0x80000000000
+    end
+    case 0x2c
+	set B 0x100000000000
+    end
+    case 0x2d
+	set B 0x200000000000
+    end
+    case 0x2e
+	set B 0x400000000000
+    end
+    case 0x2f
+	set B 0x800000000000
+    end
+    case 0x30
+	set B 0x1000000000000
+    end
+    case 0x31
+	set B 0x2000000000000
+    end
+    case 0x32
+	set B 0x4000000000000
+    end
+    case 0x33
+	set B 0x8000000000000
+    end
+    case 0x34
+	set B 0x10000000000000
+    end
+    case 0x35
+	set B 0x20000000000000
+    end
+    case 0x36
+	set B 0x40000000000000
+    end
+    case 0x37
+	set B 0x80000000000000
+    end
+    case 0x38
+	set B 0x100000000000000
+    end
+    case 0x39
+	set B 0x200000000000000
+    end
+    case 0x3a
+	set B 0x400000000000000
+    end
+    case 0x3b
+	set B 0x800000000000000
+    end
+    case 0x3c
+	set B 0x1000000000000000
+    end
+    case 0x3d
+	set B 0x2000000000000000
+    end
+    case 0x3e
+	set B 0x4000000000000000
+    end
+    case 0x3f
+	set B 0x8000000000000000
+    end
+    default 
+	set B 0x0
+    end	
+    end
+end
+
+var -1 0xfffffffff
+var p 0x0
+var -2 0xfffffffff
+var n 0x8
+call power2 n -> p

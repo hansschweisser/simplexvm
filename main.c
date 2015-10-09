@@ -5,6 +5,7 @@
 #include <inttypes.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "page_slab.h"
 #include "page.h"
@@ -12,7 +13,10 @@
 #include "core.h"
 #include "cpu.h"
 #include "control.h"
+#include "trap.h"
 
+
+#define MAX_FILE_NAME 1000
 
 #define VERSION "0.1"
 #define AUTHOR "Hans Schweisser"
@@ -266,16 +270,120 @@ void vrun_times(char *buff){
     execute_cmd_n( strtovbyte(n) );
 }
 
+void vrun_tillexit(char *buff){
+    completionr("<enter>");
+    execute_tillexit();
+}
+
 void vrun(char *buff){
     init();
     ifs("once") { execute_cmd_once(); }
     ifsf("times",vrun_times); 
-    completionr("once | times");
+    ifsf("tillexit",vrun_tillexit);
+    completionr("once | times | tillexit");
     ifs("") { printf("Usage:\n\tonce\n"); return;}
 
 }
 
+FILE *out;
+
+void parse_and_run(char *file){
+    FILE* in = fopen(file,"r");
+    char fileout[MAX_FILE_NAME];
+    strcpy(fileout,file);
+    strcat(fileout,".out");
+    out = fopen(fileout,"w");
+    string(null);
+
+    if( in == NULL ) {
+	printf("error: cannot open file %s for reading\n",file);
+	exit(1);
+    }
+    if( out == NULL ) {
+	printf("error: cannot open file %s for writing\n",fileout);
+	exit(1);
+    }
+    
+
+    printf("file in = %s, file out = %s\n",file,fileout);
+    string(item);
+    
+    while ( 1 ) {
+	if( fscanf(in,"%s",item)  != 1 ) {
+	    break;
+	}
+	if( strcmp(item,"") == 0 ) { 
+	    continue; 
+	}
+	else if( strcmp(item,"load") == 0 ){
+	    vbyte addr;
+	    if( fscanf(in,"%" PRIx64, &addr) != 1) { 
+		printf("error: expected vbyte, got something else\n");
+		exit(1);
+	    }
+	    vbyte byte;
+	    long i = 0;
+	    while(1) {
+		if( fscanf(in,"%s",item) != 1 ) {
+		    printf("error: expected next item, got nothing\n");
+		    exit(1);
+		}
+		if(strcmp(item,"end") == 0 ){
+		    break;
+		}
+		if( sscanf(item,"%" PRIx64, &byte) != 1){
+		    printf("error: expected vbyte, got something else\n");
+		    exit(1);
+		}
+		write_vbyte(addr+i,byte);
+		++i;
+	    }
+	}
+	else if( strcmp(item, "trap") == 0 ){
+	    vbyte from, to;
+	    if( fscanf(in, "%" PRIx64 , &from) != 1) { printf("error: expected vbyte\n");exit(1);}
+	    if( fscanf(in, "%" PRIx64, &to) != 1) { printf("error: expected vbyte\n");exit(1);}
+
+	    struct trap *t = new_trap(from, to);
+	    t->file = out;
+	    add_trap(t);
+	    printf("Loaded trap (%" PRIx64 " %" PRIx64 ")\n",from,to);
+	    
+	}
+	else if( strcmp(item, "dump") == 0 ){
+	    vbyte from,to;
+	    string(name);
+	    if( fscanf(in, "%s", name ) != 1 ) { printf("error: expected string\n");exit(1);}
+	    if( fscanf(in, "%" PRIx64 , &from) != 1) { printf("error: expected vbyte\n");exit(1);}
+	    if( fscanf(in, "%" PRIx64, &to) != 1) { printf("error: expected vbyte\n");exit(1);}
+	    
+	    struct dump* d = new_dump(name,from,to);
+	    d->file = out;
+	    add_dump(d);
+	    printf("Loaded dump (%s %"PRIx64" %"PRIx64")\n", name,from,to);
+	}
+	else {
+	    printf("Unknown command '%s'\n",item);
+	    exit(1);
+	}
+	
+
+    }
+
+
+    fclose(in);
+}
+
+
 int main(int argc, char **argv) {
+
+
+    if( argc == 2 ){
+	parse_and_run(argv[1]);	
+	execute_tillexit();
+	execute_dumps();
+//	return 0;
+    }
 
     struct termios old_tio, new_tio;
     unsigned char c;
@@ -389,5 +497,7 @@ int main(int argc, char **argv) {
     }
 
     tcsetattr(STDIN_FILENO,TCSANOW,&old_tio);
+
+    fclose(out);
     return 0;
 }

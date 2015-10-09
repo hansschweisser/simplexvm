@@ -84,14 +84,14 @@ struct command {
 };
 
 struct command commands[] = {
-    { 1, cmd_copy },
-    { 2, cmd_not },
-    { 3, cmd_or },
-    { 4, cmd_and },
-    { 5, cmd_ifjmp },
-    { 6, cmd_idle },
-    { 7, cmd_exit },
-    { 8, cmd_ifjmp2 }
+    { CMD_COPY, cmd_copy },
+    { CMD_NOT, cmd_not },
+    { CMD_OR, cmd_or },
+    { CMD_AND, cmd_and },
+    { CMD_IFJMP, cmd_ifjmp },
+    { CMD_IDLE, cmd_idle },
+    { CMD_EXIT, cmd_exit },
+    { CMD_IFJMP2, cmd_ifjmp2 }
 };
 
 
@@ -131,6 +131,16 @@ void execute_cmd_once() {
 
 void execute_cmd_n(int n){
     for(int i=0;i<n;++i){
+	ep = execute_cmd(ep);
+    }
+}
+
+
+void execute_tillexit(){
+    while(1){
+	vbyte nextcmd = read_vbyte_notrap(ep);
+	
+	if( nextcmd == CMD_EXIT ) { return ; }
 	ep = execute_cmd(ep);
     }
 }
