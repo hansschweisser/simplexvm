@@ -1,0 +1,5 @@
+copy A print
+A: db 0x1234567890abcdef
+
+offset 0x1000
+print: db

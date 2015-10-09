@@ -205,7 +205,7 @@ for(my $i=0;$i<(scalar @lines);++$i){
     }elsif($cmd[0] eq "if"){
 	push(@namespace,[]);
 	my $ifindex = get_var_index();
-	if( $cmd[1] and (not $cmd[2]) ){
+	if( (defined $cmd[1]) and (not (defined $cmd[2])) ){
 	    my $vi = get_index_of_variable($cmd[1]);
 	    my $tmp = get_tmp_var("0x0");    
 	    push(@endstack,{type=>"if", arg1=> $vi , arg2 => $tmp , index=>$ifindex,});
@@ -294,9 +294,12 @@ for(my $i=0;$i<(scalar @lines);++$i){
 		last;
 	    }
 	}
-	if( $found == 0 ) { die "compilation error: unknown function $cmd[1]";}
+	my $index = get_var_index();
+	if( $found == 0 ) { 
+#print "debug.\@procedures = ".Dumper(\@procedures);
+	    die "compilation error: unknown function $cmd[1]";}
 
-	code_push({type=>"call", name=>$cmd[1], index=>$inx, argin=>\@argin, argout=>\@argout, argprocin => \@procargin, argprocout => \@procargout,});
+	code_push({type=>"call", name=>$cmd[1], index=>$index, procindex=>$inx, argin=>\@argin, argout=>\@argout, argprocin => \@procargin, argprocout => \@procargout,});
     }elsif($cmd[0] eq "loop" ){
 	if( (scalar @cmd) != 4 ) { die "compilation error: wrong loop (@cmd)";}
 	my $opt = 1;
@@ -432,11 +435,12 @@ foreach my $var (@list) {
 		
 		push(@code, "copy $codevar $procvar");
 	    }
-	    my $indx = $var->{index};
-	    push(@code ,  ("copy return-var-$indx proc-return-$indx " ,
-			    "ifjmp zero zero $indx",	
-			    "return-var-$indx: db call-return-$indx", 
-			    "call-return-$indx: idle"  ));
+	    my $index = $var->{index};
+	    my $procindex = $var->{procindex};
+	    push(@code ,  ("copy return-var-$index proc-return-$procindex" ,
+			    "ifjmp zero zero $procindex",	
+			    "return-var-$index: db call-return-$index", 
+			    "call-return-$index: idle"  ));
 	    for my $i (0..((scalar @aout)-1)){
 		my $codevar = $aout[$i];
 		my $procvar = $aprocout[$i];

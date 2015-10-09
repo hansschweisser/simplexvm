@@ -197,3 +197,438 @@ proc power2 A -> B
     end	
     end
 end
+
+proc bit_left_shift A -> B
+    switch A
+    case 0x1
+	set B 0x2
+    end
+    case 0x2
+	set B 0x4
+    end
+    case 0x4
+	set B 0x8
+    end
+    case 0x8
+	set B 0x10
+    end
+    case 0x10
+	set B 0x20
+    end
+    case 0x20
+	set B 0x40
+    end
+    case 0x40
+	set B 0x80
+    end
+    case 0x80
+	set B 0x100
+    end
+    case 0x100
+	set B 0x200
+    end
+    case 0x200
+	set B 0x400
+    end
+    case 0x400
+	set B 0x800
+    end
+    case 0x800
+	set B 0x1000
+    end
+    case 0x1000
+	set B 0x2000
+    end
+    case 0x2000
+	set B 0x4000
+    end
+    case 0x4000
+	set B 0x8000
+    end
+    case 0x8000
+	set B 0x10000
+    end
+    case 0x10000
+	set B 0x20000
+    end
+    case 0x20000
+	set B 0x40000
+    end
+    case 0x40000
+	set B 0x80000
+    end
+    case 0x80000
+	set B 0x100000
+    end
+    case 0x100000
+	set B 0x200000
+    end
+    case 0x200000
+	set B 0x400000
+    end
+    case 0x400000
+	set B 0x800000
+    end
+    case 0x800000
+	set B 0x1000000
+    end
+    case 0x1000000
+	set B 0x2000000
+    end
+    case 0x2000000
+	set B 0x4000000
+    end
+    case 0x4000000
+	set B 0x8000000
+    end
+    case 0x8000000
+	set B 0x10000000
+    end
+    case 0x10000000
+	set B 0x20000000
+    end
+    case 0x20000000
+	set B 0x40000000
+    end
+    case 0x40000000
+	set B 0x80000000
+    end
+    case 0x80000000
+	set B 0x100000000
+    end
+    case 0x100000000
+	set B 0x200000000
+    end
+    case 0x200000000
+	set B 0x400000000
+    end
+    case 0x400000000
+	set B 0x800000000
+    end
+    case 0x800000000
+	set B 0x1000000000
+    end
+    case 0x1000000000
+	set B 0x2000000000
+    end
+    case 0x2000000000
+	set B 0x4000000000
+    end
+    case 0x4000000000
+	set B 0x8000000000
+    end
+    case 0x8000000000
+	set B 0x10000000000
+    end
+    case 0x10000000000
+	set B 0x20000000000
+    end
+    case 0x20000000000
+	set B 0x40000000000
+    end
+    case 0x40000000000
+	set B 0x80000000000
+    end
+    case 0x80000000000
+	set B 0x100000000000
+    end
+    case 0x100000000000
+	set B 0x200000000000
+    end
+    case 0x200000000000
+	set B 0x400000000000
+    end
+    case 0x400000000000
+	set B 0x800000000000
+    end
+    case 0x800000000000
+	set B 0x1000000000000
+    end
+    case 0x1000000000000
+	set B 0x2000000000000
+    end
+    case 0x2000000000000
+	set B 0x4000000000000
+    end
+    case 0x4000000000000
+	set B 0x8000000000000
+    end
+    case 0x8000000000000
+	set B 0x10000000000000
+    end
+    case 0x10000000000000
+	set B 0x20000000000000
+    end
+    case 0x20000000000000
+	set B 0x40000000000000
+    end
+    case 0x40000000000000
+	set B 0x80000000000000
+    end
+    case 0x80000000000000
+	set B 0x100000000000000
+    end
+    case 0x100000000000000
+	set B 0x200000000000000
+    end
+    case 0x200000000000000
+	set B 0x400000000000000
+    end
+    case 0x400000000000000
+	set B 0x800000000000000
+    end
+    case 0x800000000000000
+	set B 0x1000000000000000
+    end
+    case 0x1000000000000000
+	set B 0x2000000000000000
+    end
+    case 0x2000000000000000
+	set B 0x4000000000000000
+    end
+    case 0x4000000000000000
+	set B 0x8000000000000000
+    end
+    case 0x8000000000000000
+	set B 0x0
+    end
+    end
+end
+
+proc bit_right_shift A -> B
+    switch A
+    case 0x1
+	set B 0x0
+    end
+    case 0x2
+	set B 0x1
+    end
+    case 0x4
+	set B 0x2
+    end
+    case 0x8
+	set B 0x4
+    end
+    case 0x10
+	set B 0x8
+    end
+    case 0x20
+	set B 0x10
+    end
+    case 0x40
+	set B 0x20
+    end
+    case 0x80
+	set B 0x40
+    end
+    case 0x100
+	set B 0x80
+    end
+    case 0x200
+	set B 0x100
+    end
+    case 0x400
+	set B 0x200
+    end
+    case 0x800
+	set B 0x400
+    end
+    case 0x1000
+	set B 0x800
+    end
+    case 0x2000
+	set B 0x1000
+    end
+    case 0x4000
+	set B 0x2000
+    end
+    case 0x8000
+	set B 0x4000
+    end
+    case 0x10000
+	set B 0x8000
+    end
+    case 0x20000
+	set B 0x10000
+    end
+    case 0x40000
+	set B 0x20000
+    end
+    case 0x80000
+	set B 0x40000
+    end
+    case 0x100000
+	set B 0x80000
+    end
+    case 0x200000
+	set B 0x100000
+    end
+    case 0x400000
+	set B 0x200000
+    end
+    case 0x800000
+	set B 0x400000
+    end
+    case 0x1000000
+	set B 0x800000
+    end
+    case 0x2000000
+	set B 0x1000000
+    end
+    case 0x4000000
+	set B 0x2000000
+    end
+    case 0x8000000
+	set B 0x4000000
+    end
+    case 0x10000000
+	set B 0x8000000
+    end
+    case 0x20000000
+	set B 0x10000000
+    end
+    case 0x40000000
+	set B 0x20000000
+    end
+    case 0x80000000
+	set B 0x40000000
+    end
+    case 0x100000000
+	set B 0x80000000
+    end
+    case 0x200000000
+	set B 0x100000000
+    end
+    case 0x400000000
+	set B 0x200000000
+    end
+    case 0x800000000
+	set B 0x400000000
+    end
+    case 0x1000000000
+	set B 0x800000000
+    end
+    case 0x2000000000
+	set B 0x1000000000
+    end
+    case 0x4000000000
+	set B 0x2000000000
+    end
+    case 0x8000000000
+	set B 0x4000000000
+    end
+    case 0x10000000000
+	set B 0x8000000000
+    end
+    case 0x20000000000
+	set B 0x10000000000
+    end
+    case 0x40000000000
+	set B 0x20000000000
+    end
+    case 0x80000000000
+	set B 0x40000000000
+    end
+    case 0x100000000000
+	set B 0x80000000000
+    end
+    case 0x200000000000
+	set B 0x100000000000
+    end
+    case 0x400000000000
+	set B 0x200000000000
+    end
+    case 0x800000000000
+	set B 0x400000000000
+    end
+    case 0x1000000000000
+	set B 0x800000000000
+    end
+    case 0x2000000000000
+	set B 0x1000000000000
+    end
+    case 0x4000000000000
+	set B 0x2000000000000
+    end
+    case 0x8000000000000
+	set B 0x4000000000000
+    end
+    case 0x10000000000000
+	set B 0x8000000000000
+    end
+    case 0x20000000000000
+	set B 0x10000000000000
+    end
+    case 0x40000000000000
+	set B 0x20000000000000
+    end
+    case 0x80000000000000
+	set B 0x40000000000000
+    end
+    case 0x100000000000000
+	set B 0x80000000000000
+    end
+    case 0x200000000000000
+	set B 0x100000000000000
+    end
+    case 0x400000000000000
+	set B 0x200000000000000
+    end
+    case 0x800000000000000
+	set B 0x400000000000000
+    end
+    case 0x1000000000000000
+	set B 0x800000000000000
+    end
+    case 0x2000000000000000
+	set B 0x1000000000000000
+    end
+    case 0x4000000000000000
+	set B 0x2000000000000000
+    end
+    case 0x8000000000000000
+	set B 0x4000000000000000
+    end
+    end
+end
+
+
+proc left_shift A -> B
+    var curr 0x1
+    var currbit 0x0
+    var curr2 0x0
+    var zero 0x0
+    set B 0x0
+    loop curr not zero
+	and curr A currbit
+	if currbit	    
+	else
+	    call bit_left_shift curr -> curr2
+	    or B curr2 B
+	end
+	call bit_left_shift curr -> curr
+    end
+end
+
+proc right_shift A -> B
+    var curr 0x2
+    var currbit 0x0
+    var curr2 0x0
+    var zero 0x0
+    set B 0x0
+    loop curr not zero
+	and curr A currbit
+	if currbit	    
+	else
+	    call bit_right_shift curr -> curr2
+	    or B curr2 B
+	end
+	call bit_left_shift curr -> curr
+    end    
+end
+
+
+proc inc A -> B
+    
+end
+
