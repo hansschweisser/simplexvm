@@ -73,7 +73,9 @@ foreach my $line (@lines) {
 	    $labels{$label} = $curraddr;
 	}
 	$curraddr+= 3;
-		
+    }elsif ( $name eq "offset" ) {
+	if( not defined $args[1] ) { die("compilation error: no argument to offset\n"); }
+	$curraddr = hex($args[1]);
     }elsif ( $name eq "not" ) { 
 	my @a;
 	for(my $i=1;$i<scalar(@args);++$i){	
