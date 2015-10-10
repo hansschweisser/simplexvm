@@ -1,5 +1,14 @@
-var -1 0xfffffffff
-var p 0x0
-var -2 0xfffffffff
-var n 0x8
-call power2 n p
+var a 0x0
+var end 0x10
+var p print
+
+loop a not end
+    copy a p
+    call inc p -> p
+    call inc a -> a
+end
+exit
+
+
+offset 0xffff
+print: db

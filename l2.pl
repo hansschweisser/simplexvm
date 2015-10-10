@@ -202,6 +202,24 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	    my $tmpvar = get_tmp_var($cmd[2]);
 	    code_push({type=>"copy", arg1=>$tmpvar, arg2=> $vi1,});
 	}
+    }elsif($cmd[0] eq "copy" ){
+	if(! ($cmd[1] && $cmd[2]) ){
+	    die "compilation error: copy needs two arguments";
+	}
+	my $vi1;
+	my $vi2;
+	if( is_variable($cmd[1]) ){
+	    $vi1 = get_index_of_variable($cmd[1]);
+	}else{
+	    die "compilation error: copy first argument '$cmd[1]' is not a variable, line $i";
+	}
+	if( is_variable($cmd[2]) ){
+	    $vi2 = get_index_of_variable($cmd[2]);
+	}else{
+	    die "compilation error: copy second argument '$cmd[2]' is not a variable, line $i";
+	}
+	my $index = get_var_index();
+	code_push({type=>"copy2", arg1=>$vi1, arg2=>$vi2, index=>$index, });
     }elsif($cmd[0] eq "if"){
 	push(@namespace,[]);
 	my $ifindex = get_var_index();
@@ -408,7 +426,13 @@ foreach my $var (@list) {
 	    $var->{code} = [ "exit" ];
 	}elsif ($var->{type} eq "copy" ){
 	    $var->{code} = [ "copy $var->{arg1} $var->{arg2}" ];
-
+	}elsif ($var->{type} eq "copy2" ){
+	    $var->{code} = ["copy $var->{arg1} copy2-arg1-$var->{index}", 
+			    "copy $var->{arg2} copy2-arg2-$var->{index}", 
+			    "db 0x1", 
+			    "copy2-arg1-$var->{index}: db 0x0", 
+			    "copy2-arg2-$var->{index}: db 0x0" ] ;
+			    
 	}elsif ($var->{type} eq "else" ){
 	    $var->{code} = ["ifjmp zero zero if-end-$var->{index}",
 			    "if-else-$var->{index}: idle" ];

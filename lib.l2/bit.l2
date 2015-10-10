@@ -629,6 +629,26 @@ end
 
 
 proc inc A -> B
-    
+    var one 0x1
+    var zero 0x0
+    var parity 0x0
+    var bit 0x1
+    var end 0x0
+
+    loop end eq zero
+	and bit A parity
+	if parity zero
+	    or A bit B	    
+	    set end one
+	else
+	    var negative
+	    not bit negative
+	    and A negative B
+	    call bit_left_shift bit -> bit
+	    if bit zero
+		set end one
+	    end
+	end
+    end
 end
 

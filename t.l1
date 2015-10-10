@@ -1,0 +1,22 @@
+copy label0000 copy2-arg1-label0005
+copy label0003 copy2-arg2-label0005
+db 0x1
+copy2-arg1-label0005: db 0x0
+copy2-arg2-label0005: db 0x0
+copy label0001 copy2-arg1-label0006
+copy label0004 copy2-arg2-label0006
+db 0x1
+copy2-arg1-label0006: db 0x0
+copy2-arg2-label0006: db 0x0
+loop-begin-label0007: idle
+ifjmp label0000 label0000 loop-begin-eq-label0007
+ifjmp zero zero loop-end-label0007
+loop-begin-eq-label0007: idle
+ifjmp zero zero loop-begin-label0007
+loop-end-label0007: idle
+zero: db 0x0
+label0000: db 0x0
+label0001: db 0x1
+label0002: db 0xff
+label0003: db 0xffff
+label0004: db 0x10000

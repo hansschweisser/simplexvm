@@ -406,6 +406,14 @@ label0598: db 0x0
 label0599: db 0x0
 label0600: db 0x0
 label0603: db 0x0
+proc-var-A-label0606: db 0x0
+proc-var-B-label0606: db 0x0
+label0607: db 0x1
+label0608: db 0x0
+label0609: db 0x0
+label0610: db 0x1
+label0611: db 0x0
+label0614: db 0x0
 proc-return-label0000: db 0x0
 label0000: idle
 ifjmp label0003 proc-var-A-label0000 case-begin-label0002
@@ -1627,3 +1635,35 @@ copy proc-var-B-label0196 label0596
 ifjmp zero zero loop-begin-label0601
 loop-end-label0601: idle
 ifjmp2 zero zero proc-return-label0595
+proc-return-label0606: db 0x0
+label0606: idle
+loop-begin-label0612: idle
+ifjmp label0611 label0608 loop-begin-eq-label0612
+ifjmp zero zero loop-end-label0612
+loop-begin-eq-label0612: idle
+and label0610 proc-var-A-label0606 label0609
+ifjmp label0609 label0608 if-begin-label0613
+ifjmp zero zero if-else-label0613
+if-begin-label0613: idle
+or proc-var-A-label0606 label0610 proc-var-B-label0606
+copy label0607 label0611
+ifjmp zero zero if-end-label0613
+if-else-label0613: idle
+not label0610 label0614
+and proc-var-A-label0606 label0614 proc-var-A-label0606
+copy label0610 proc-var-A-label0196
+copy return-var-label0615 proc-return-label0196
+ifjmp zero zero label0196
+return-var-label0615: db call-return-label0615
+call-return-label0615: idle
+copy proc-var-B-label0196 label0610
+ifjmp label0610 label0608 if-begin-label0616
+ifjmp zero zero if-else-label0616
+if-begin-label0616: idle
+copy label0607 label0611
+if-else-label0616: idle
+if-end-label0616:  idle
+if-end-label0613:  idle
+ifjmp zero zero loop-begin-label0612
+loop-end-label0612: idle
+ifjmp2 zero zero proc-return-label0606
