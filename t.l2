@@ -1,11 +1,24 @@
+var -1 0xffff
+var print1 0x0
+var print2 0x0
+var -2 0xffff
 
-var zero 0x0
-var a 0x1
-var b 0xff
-var print 0xffff
-var print2 0x10000
-copy zero print
-copy a print2
-
-loop zero eq zero
+proc P a -> b 
+    if a 0x0
+	set b 0x01
+    else
+	set b 0x02
+    end 
 end
+
+var a 0x0
+
+call P a -> a
+
+set print1 a
+
+call P a -> a
+set print2 a
+
+exit
+

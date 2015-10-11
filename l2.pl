@@ -147,8 +147,6 @@ for(my $i=0;$i<(scalar @lines);++$i){
 
     $line =~ s/^\s+|\s+$//g;
 
-#print "debug.\@codenamespace = " .Dumper(\@codenamespace);
-
     my @cmd = split(/\s+/,$line);
     if($cmd[0] eq "var" ){
 	my $vindex = get_var_index();
@@ -159,6 +157,8 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	push(@variables,{name=>$cmd[1],index=> $vindex, value => $val, });
 	my $last = (scalar @namespace) -1;
 	push(@{$namespace[(scalar @namespace)-1]},{ name=>$cmd[1],index=>$vindex, });
+	my $tmpvar = get_tmp_var($cmd[2]);
+	code_push({type=>"copy",arg2=>$vindex,arg1=>$tmpvar,});
     }elsif ($cmd[0] eq "begin" ){
 	push(@namespace,[]);
 	push(@endstack,{type=>"begin",});
@@ -202,6 +202,21 @@ for(my $i=0;$i<(scalar @lines);++$i){
 	    my $tmpvar = get_tmp_var($cmd[2]);
 	    code_push({type=>"copy", arg1=>$tmpvar, arg2=> $vi1,});
 	}
+    }elsif($cmd[0] eq "setref" ){
+	if(! ($cmd[1] && $cmd[2]) ){
+	    die "compilation error: setref needs two arguments, line $i";
+	}
+	if( ! is_variable($cmd[2]) ){
+	    die "compilation error: '$cmd[2]' is not a variable, line $i";
+	}
+
+	my $vi2 = get_index_of_variable($cmd[2]);
+
+	#code_push({type=>"setref", arg1=>$vi1, arg2=>$vi2,});
+	my $index = get_var_index();
+	push(@variables, {name=>$cmd[1], index=>$index, value=>$vi2,});
+	var_push({name=>$cmd[1],index=>$index,});
+
     }elsif($cmd[0] eq "copy" ){
 	if(! ($cmd[1] && $cmd[2]) ){
 	    die "compilation error: copy needs two arguments";

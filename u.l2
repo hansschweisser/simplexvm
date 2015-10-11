@@ -1,0 +1,9 @@
+var a 0x88
+
+proc name A -> B
+    var X 0x55
+end
+
+
+call name a -> a
+exit

@@ -37,11 +37,6 @@ vbyte cmd_or(vbyte address) {
     vbyte result = va | vb; 
     write_vbyte(to, result );
 
-printf("debug.cmd_or  [%" PRIx64 " rv%" PRIx64 "] [%" PRIx64 " rv%" PRIx64 "] [%" PRIx64 " wv%" PRIx64 "] \n", 
-	read_vbyte(address+1), va, read_vbyte(address+2), vb, to, result ); 
-
-
-
     return address+4;
     
 }

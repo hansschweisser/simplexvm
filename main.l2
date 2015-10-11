@@ -1,0 +1,13 @@
+var char 0x0
+setref &char char
+var print 0xffff
+
+var end 0x10
+
+loop char not end
+    copy &char print
+    call inc char -> char
+    call inc print -> print
+end
+
+exit

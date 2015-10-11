@@ -1,0 +1,13 @@
+#!/bin/bash
+
+cat lib.l2/bit.l2 main.l2 > _main.l2
+./l2.pl _main.l2 
+./l1.pl _main.l1
+mv _main.bin main.bin
+
+
+echo "load 0x0 " > _conf.tr
+cat main.bin >> _conf.tr
+echo "end" >> _conf.tr
+
+./vm _conf.tr

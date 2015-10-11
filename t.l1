@@ -1,22 +1,37 @@
-copy label0000 copy2-arg1-label0005
-copy label0003 copy2-arg2-label0005
-db 0x1
-copy2-arg1-label0005: db 0x0
-copy2-arg2-label0005: db 0x0
-copy label0001 copy2-arg1-label0006
-copy label0004 copy2-arg2-label0006
-db 0x1
-copy2-arg1-label0006: db 0x0
-copy2-arg2-label0006: db 0x0
-loop-begin-label0007: idle
-ifjmp label0000 label0000 loop-begin-eq-label0007
-ifjmp zero zero loop-end-label0007
-loop-begin-eq-label0007: idle
-ifjmp zero zero loop-begin-label0007
-loop-end-label0007: idle
+copy label0009 proc-var-a-label0004
+copy return-var-label0010 proc-return-label0004
+ifjmp zero zero label0004
+return-var-label0010: db call-return-label0010
+call-return-label0010: idle
+copy proc-var-b-label0004 label0009
+copy label0009 label0001
+copy label0009 proc-var-a-label0004
+copy return-var-label0011 proc-return-label0004
+ifjmp zero zero label0004
+return-var-label0011: db call-return-label0011
+call-return-label0011: idle
+copy proc-var-b-label0004 label0009
+copy label0009 label0002
+exit
 zero: db 0x0
-label0000: db 0x0
-label0001: db 0x1
-label0002: db 0xff
+label0000: db 0xffff
+label0001: db 0x0
+label0002: db 0x0
 label0003: db 0xffff
-label0004: db 0x10000
+proc-var-a-label0004: db 0x0
+proc-var-b-label0004: db 0x0
+label0006: db 0x0
+label0007: db 0x1
+label0008: db 0x2
+label0009: db 0x0
+proc-return-label0004: db 0x0
+label0004: idle
+ifjmp proc-var-a-label0004 label0006 if-begin-label0005
+ifjmp zero zero if-else-label0005
+if-begin-label0005: idle
+copy label0007 proc-var-b-label0004
+ifjmp zero zero if-end-label0005
+if-else-label0005: idle
+copy label0008 proc-var-b-label0004
+if-end-label0005:  idle
+ifjmp2 zero zero proc-return-label0004
