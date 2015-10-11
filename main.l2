@@ -1,13 +1,30 @@
+var base 0x10
 var char 0x0
 setref &char char
 var print 0xffff
+var i 0x0
 
-var end 0x10
+var neg 0x0
+var one 0x1
 
-loop char not end
+var end 0x100
+
+loop i not end
+
+    set char i
     copy &char print
-    call inc char -> char
+    call inc print -> print 
+
+    call neg i -> char
+    copy &char print
     call inc print -> print
+
+    call sub i i -> char
+    copy &char print
+    call inc print -> print 
+
+
+    call inc i -> i
 end
 
 exit

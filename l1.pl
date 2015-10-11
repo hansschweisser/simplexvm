@@ -254,7 +254,6 @@ foreach my $line (@lines) {
 
 }
 
-print "debug.\@metalines = " . Dumper(\@metalines);
 my @binary;
 
 foreach my $metaline (@metalines) {

@@ -1,27 +1,67 @@
-copy label0632 label0631
-copy label0635 label0634
-copy label0637 label0636
-loop-begin-label0638: idle
-ifjmp label0631 label0636 loop-end-label0638
-copy label0633 copy2-arg1-label0639
-copy label0634 copy2-arg2-label0639
+copy label0685 label0684
+copy label0687 label0686
+copy label0690 label0689
+copy label0692 label0691
+copy label0694 label0693
+copy label0696 label0695
+copy label0698 label0697
+loop-begin-label0699: idle
+ifjmp label0691 label0697 loop-end-label0699
+copy label0691 label0686
+copy label0688 copy2-arg1-label0700
+copy label0689 copy2-arg2-label0700
 db 0x1
-copy2-arg1-label0639: db 0x0
-copy2-arg2-label0639: db 0x0
-copy label0631 proc-var-A-label0614
-copy return-var-label0640 proc-return-label0614
+copy2-arg1-label0700: db 0x0
+copy2-arg2-label0700: db 0x0
+copy label0689 proc-var-A-label0614
+copy return-var-label0701 proc-return-label0614
 ifjmp zero zero label0614
-return-var-label0640: db call-return-label0640
-call-return-label0640: idle
-copy proc-var-B-label0614 label0631
-copy label0634 proc-var-A-label0614
-copy return-var-label0641 proc-return-label0614
+return-var-label0701: db call-return-label0701
+call-return-label0701: idle
+copy proc-var-B-label0614 label0689
+copy label0691 proc-var-A-label0679
+copy return-var-label0702 proc-return-label0679
+ifjmp zero zero label0679
+return-var-label0702: db call-return-label0702
+call-return-label0702: idle
+copy proc-var-B-label0679 label0686
+copy label0688 copy2-arg1-label0703
+copy label0689 copy2-arg2-label0703
+db 0x1
+copy2-arg1-label0703: db 0x0
+copy2-arg2-label0703: db 0x0
+copy label0689 proc-var-A-label0614
+copy return-var-label0704 proc-return-label0614
 ifjmp zero zero label0614
-return-var-label0641: db call-return-label0641
-call-return-label0641: idle
-copy proc-var-B-label0614 label0634
-ifjmp zero zero loop-begin-label0638
-loop-end-label0638: idle
+return-var-label0704: db call-return-label0704
+call-return-label0704: idle
+copy proc-var-B-label0614 label0689
+copy label0691 proc-var-A-label0681
+copy label0691 proc-var-B-label0681
+copy return-var-label0705 proc-return-label0681
+ifjmp zero zero label0681
+return-var-label0705: db call-return-label0705
+call-return-label0705: idle
+copy proc-var-C-label0681 label0686
+copy label0688 copy2-arg1-label0706
+copy label0689 copy2-arg2-label0706
+db 0x1
+copy2-arg1-label0706: db 0x0
+copy2-arg2-label0706: db 0x0
+copy label0689 proc-var-A-label0614
+copy return-var-label0707 proc-return-label0614
+ifjmp zero zero label0614
+return-var-label0707: db call-return-label0707
+call-return-label0707: idle
+copy proc-var-B-label0614 label0689
+copy label0691 proc-var-A-label0614
+copy return-var-label0708 proc-return-label0614
+ifjmp zero zero label0614
+return-var-label0708: db call-return-label0708
+call-return-label0708: idle
+copy proc-var-B-label0614 label0691
+ifjmp zero zero loop-begin-label0699
+loop-end-label0699: idle
 exit
 zero: db 0x0
 proc-var-A-label0000: db 0x0
@@ -453,13 +493,64 @@ label0623: db 0x0
 label0624: db 0x0
 label0627: db 0x0
 label0628: db 0x0
-label0631: db 0x0
-label0632: db 0x0
-label0633: db label0631
-label0634: db 0xffff
-label0635: db 0xffff
-label0636: db 0x10
-label0637: db 0x10
+proc-var-A-label0631: db 0x0
+proc-var-B-label0631: db 0x0
+label0632: db 0x1
+label0633: db 0x1
+label0634: db 0x0
+label0635: db 0x0
+label0636: db 0x0
+label0637: db 0x0
+label0638: db 0x1
+label0639: db 0x1
+label0640: db 0x0
+label0641: db 0x0
+label0646: db 0x0
+label0647: db 0x0
+proc-var-A-label0648: db 0x0
+proc-var-B-label0648: db 0x0
+proc-var-C-label0648: db 0x0
+label0649: db 0x0
+label0650: db 0x0
+label0651: db 0x1
+label0652: db 0x1
+label0653: db 0x0
+label0654: db 0x0
+label0655: db 0x0
+label0656: db 0x0
+label0657: db 0x0
+label0658: db 0x0
+label0659: db 0x0
+label0660: db 0x0
+label0661: db 0x0
+label0666: db 0x0
+label0667: db 0x0
+label0669: db 0x0
+label0670: db 0x1
+label0673: db 0x0
+label0674: db 0x1
+label0676: db 0x1
+label0677: db 0x1
+proc-var-A-label0679: db 0x0
+proc-var-B-label0679: db 0x0
+proc-var-A-label0681: db 0x0
+proc-var-B-label0681: db 0x0
+proc-var-C-label0681: db 0x0
+label0684: db 0x10
+label0685: db 0x10
+label0686: db 0x0
+label0687: db 0x0
+label0688: db label0686
+label0689: db 0xffff
+label0690: db 0xffff
+label0691: db 0x0
+label0692: db 0x0
+label0693: db 0x0
+label0694: db 0x0
+label0695: db 0x1
+label0696: db 0x1
+label0697: db 0x100
+label0698: db 0x100
 proc-return-label0000: db 0x0
 label0000: idle
 ifjmp label0003 proc-var-A-label0000 case-begin-label0002
@@ -1729,3 +1820,150 @@ if-end-label0626:  idle
 ifjmp zero zero loop-begin-label0625
 loop-end-label0625: idle
 ifjmp2 zero zero proc-return-label0614
+proc-return-label0631: db 0x0
+label0631: idle
+copy label0633 label0632
+copy label0635 label0634
+copy label0637 label0636
+copy label0639 label0638
+copy label0641 label0640
+loop-begin-label0642: idle
+ifjmp label0640 label0634 loop-begin-eq-label0642
+ifjmp zero zero loop-end-label0642
+loop-begin-eq-label0642: idle
+and label0638 proc-var-A-label0631 label0636
+ifjmp label0636 label0634 if-begin-label0643
+ifjmp zero zero if-else-label0643
+if-begin-label0643: idle
+or proc-var-A-label0631 label0638 proc-var-A-label0631
+copy label0638 proc-var-A-label0196
+copy return-var-label0644 proc-return-label0196
+ifjmp zero zero label0196
+return-var-label0644: db call-return-label0644
+call-return-label0644: idle
+copy proc-var-B-label0196 label0638
+ifjmp label0638 label0634 if-begin-label0645
+ifjmp zero zero if-else-label0645
+if-begin-label0645: idle
+copy proc-var-A-label0631 proc-var-B-label0631
+copy label0632 label0640
+if-else-label0645: idle
+if-end-label0645:  idle
+ifjmp zero zero if-end-label0643
+if-else-label0643: idle
+copy label0647 label0646
+not label0638 label0646
+and proc-var-A-label0631 label0646 proc-var-A-label0631
+copy proc-var-A-label0631 proc-var-B-label0631
+copy label0632 label0640
+if-end-label0643:  idle
+ifjmp zero zero loop-begin-label0642
+loop-end-label0642: idle
+ifjmp2 zero zero proc-return-label0631
+proc-return-label0648: db 0x0
+label0648: idle
+copy label0650 label0649
+copy label0652 label0651
+copy label0654 label0653
+copy label0656 label0655
+copy label0658 label0657
+copy label0660 label0659
+copy label0661 proc-var-C-label0648
+loop-begin-label0662: idle
+ifjmp label0651 label0649 loop-end-label0662
+and label0651 proc-var-A-label0648 label0653
+and label0651 proc-var-B-label0648 label0655
+not label0651 label0659
+ifjmp label0653 label0649 if-begin-label0663
+ifjmp zero zero if-else-label0663
+if-begin-label0663: idle
+ifjmp label0655 label0649 if-begin-label0664
+ifjmp zero zero if-else-label0664
+if-begin-label0664: idle
+ifjmp label0657 label0649 if-begin-label0665
+ifjmp zero zero if-else-label0665
+if-begin-label0665: idle
+and proc-var-C-label0648 label0659 proc-var-C-label0648
+copy label0666 label0657
+ifjmp zero zero if-end-label0665
+if-else-label0665: idle
+or label0651 proc-var-C-label0648 proc-var-C-label0648
+copy label0667 label0657
+if-end-label0665:  idle
+ifjmp zero zero if-end-label0664
+if-else-label0664: idle
+ifjmp label0657 label0649 if-begin-label0668
+ifjmp zero zero if-else-label0668
+if-begin-label0668: idle
+or label0651 proc-var-C-label0648 proc-var-C-label0648
+copy label0669 label0657
+ifjmp zero zero if-end-label0668
+if-else-label0668: idle
+and proc-var-C-label0648 label0659 proc-var-C-label0648
+copy label0670 label0657
+if-end-label0668:  idle
+if-end-label0664:  idle
+ifjmp zero zero if-end-label0663
+if-else-label0663: idle
+ifjmp label0655 label0649 if-begin-label0671
+ifjmp zero zero if-else-label0671
+if-begin-label0671: idle
+ifjmp label0657 label0649 if-begin-label0672
+ifjmp zero zero if-else-label0672
+if-begin-label0672: idle
+or label0651 proc-var-C-label0648 proc-var-C-label0648
+copy label0673 label0657
+ifjmp zero zero if-end-label0672
+if-else-label0672: idle
+and label0659 proc-var-C-label0648 proc-var-C-label0648
+copy label0674 label0657
+if-end-label0672:  idle
+ifjmp zero zero if-end-label0671
+if-else-label0671: idle
+ifjmp label0657 label0649 if-begin-label0675
+ifjmp zero zero if-else-label0675
+if-begin-label0675: idle
+and label0659 proc-var-C-label0648 proc-var-C-label0648
+copy label0676 label0657
+ifjmp zero zero if-end-label0675
+if-else-label0675: idle
+or label0651 proc-var-C-label0648 proc-var-C-label0648
+copy label0677 label0657
+if-end-label0675:  idle
+if-end-label0671:  idle
+if-end-label0663:  idle
+copy label0651 proc-var-A-label0196
+copy return-var-label0678 proc-return-label0196
+ifjmp zero zero label0196
+return-var-label0678: db call-return-label0678
+call-return-label0678: idle
+copy proc-var-B-label0196 label0651
+ifjmp zero zero loop-begin-label0662
+loop-end-label0662: idle
+ifjmp2 zero zero proc-return-label0648
+proc-return-label0679: db 0x0
+label0679: idle
+not proc-var-A-label0679 proc-var-B-label0679
+copy proc-var-B-label0679 proc-var-A-label0614
+copy return-var-label0680 proc-return-label0614
+ifjmp zero zero label0614
+return-var-label0680: db call-return-label0680
+call-return-label0680: idle
+copy proc-var-B-label0614 proc-var-B-label0679
+ifjmp2 zero zero proc-return-label0679
+proc-return-label0681: db 0x0
+label0681: idle
+copy proc-var-B-label0681 proc-var-A-label0679
+copy return-var-label0682 proc-return-label0679
+ifjmp zero zero label0679
+return-var-label0682: db call-return-label0682
+call-return-label0682: idle
+copy proc-var-B-label0679 proc-var-B-label0681
+copy proc-var-A-label0681 proc-var-A-label0648
+copy proc-var-B-label0681 proc-var-B-label0648
+copy return-var-label0683 proc-return-label0648
+ifjmp zero zero label0648
+return-var-label0683: db call-return-label0683
+call-return-label0683: idle
+copy proc-var-C-label0648 proc-var-C-label0681
+ifjmp2 zero zero proc-return-label0681

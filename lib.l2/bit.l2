@@ -654,3 +654,102 @@ proc inc A -> B
     end
 end
 
+proc dec A -> B
+    var one 0x1
+    var zero 0x0
+    var parity 0x0
+    var bit 0x1
+    var end 0x0
+    
+    loop end eq zero
+	and bit A parity
+	if parity zero
+	    or A bit A
+	    call bit_left_shift bit -> bit
+	    if bit zero
+		set B A
+		set end one
+	    end
+	else
+	    var negative 0x0
+	    not bit negative
+	    and A negative A
+	    set B A	    
+	    set end one
+	end
+    end
+end
+
+
+proc add A B -> C
+    var zero 0x0
+    var bit 0x1
+    var bitA 0x0
+    var bitB 0x0    
+    var carry 0x0
+    var negative 0x0
+    
+    set C 0x0    
+
+    loop bit not zero
+	and bit A bitA
+	and bit B bitB
+	not bit negative	
+
+	if bitA zero
+	    if bitB zero
+		if carry zero
+		    and C negative C
+		    set carry 0x0
+		else
+		    or bit C C
+		    set carry 0x0
+		end
+	    else
+		if carry zero
+		    or bit C C
+		    set carry 0x0
+		else
+		    and C negative C
+		    set carry 0x1
+		end
+	    end
+	else
+	    if bitB zero
+		if carry zero
+		    or bit C C
+		    set carry 0x0
+		else
+		    and negative C C
+		    set carry 0x1
+		end
+	    else
+		if carry zero
+		    and negative C C
+		    set carry 0x1
+		else
+		    or bit C C
+		    set carry 0x1
+		end
+	    end
+	end
+	call bit_left_shift bit -> bit
+    end
+    
+end
+
+proc neg A -> B
+    not A B
+    call inc B -> B
+end
+
+proc sub A B -> C
+    call neg B -> B
+    call add A B -> C    
+end
+
+
+
+
+
+
