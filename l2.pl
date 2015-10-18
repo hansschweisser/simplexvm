@@ -604,7 +604,7 @@ sub convert_to_hex()
     if( ($value =~ /^0x[0-9a-fA-f]+$/) ){
 	return sprintf("0x%x", hex($value));
     }else{
-	die "compilation error: unknown format of number $value";
+	die "compilation error: unknown format of number '$value'";
     }
 }
 

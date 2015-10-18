@@ -1,0 +1,21 @@
+(cmd arg arg arg)
+(cmd (cmd (cmd arg arg) arg (cmd arg (cmd arg ))) arg)
+
+
+needed
+- stack
+- 
+
+
+
+in/out 
+
+in 0xff tmp
+
+out 0xff tmp
+
+
+
+
+
+

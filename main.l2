@@ -1,30 +1,22 @@
-var base 0x10
-var char 0x0
-setref &char char
-var print 0xffff
-var i 0x0
 
-var neg 0x0
-var one 0x1
+var a1 0x111111
+var a2 0x222222
+var a3 0x333333
+var a4 0x444444
 
-var end 0x100
-
-loop i not end
-
-    set char i
-    copy &char print
-    call inc print -> print 
-
-    call neg i -> char
-    copy &char print
-    call inc print -> print
-
-    call sub i i -> char
-    copy &char print
-    call inc print -> print 
+var tmp  0x0
 
 
-    call inc i -> i
-end
+call stack_push a1
+call stack_push a2
+call stack_pop -> tmp
+call stack_pop -> tmp
+call stack_pop -> tmp
+call stack_pop -> tmp
+call stack_push a4
+
+
+
 
 exit
+

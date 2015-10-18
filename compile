@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cat lib.l2/bit.l2 main.l2 > _main.l2
+cat lib.l2/bit.l2 lib.l2/stack.l2 lib.l2/string.l2 main.l2 > _main.l2
 ./l2.pl _main.l2 
 ./l1.pl _main.l1
 mv _main.bin main.bin

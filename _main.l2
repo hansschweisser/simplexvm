@@ -753,33 +753,155 @@ end
 
 
 
-var base 0x10
-var char 0x0
-setref &char char
-var print 0xffff
-var i 0x0
-
-var neg 0x0
-var one 0x1
-
-var end 0x100
-
-loop i not end
-
-    set char i
-    copy &char print
-    call inc print -> print 
-
-    call neg i -> char
-    copy &char print
-    call inc print -> print
-
-    call sub i i -> char
-    copy &char print
-    call inc print -> print 
+var stack_begin 0x1000000000
+var stack_end   0x1fffffffff
 
 
-    call inc i -> i
+var stack_tmp 0x0
+setref &stack_tmp stack_tmp
+
+
+var sp 0x0
+setref &sp sp
+
+var stack_zero 0x0
+setref &stack_zero stack_zero
+
+
+set sp stack_begin
+
+proc stack_push A
+    if sp stack_end
+    else
+	set stack_tmp A
+	copy &stack_tmp sp
+	call inc sp -> sp    
+    end
 end
 
+proc stack_pop -> B
+    if sp stack_begin
+	set B 0x0
+    else
+	call dec sp -> sp
+	copy sp &stack_tmp
+	set B stack_tmp
+	copy &stack_zero sp
+    end
+end
+
+proc stack_empty? -> B
+    if sp stack_begin 
+	set B 0x1
+    else
+	set B 0x0
+    end
+end
+var string_begin 0x7000000000
+var string_end   0x7fffffffff
+
+var string_zero 0x0
+setref &string_zero string_zero
+
+var string_null_p 0x0
+setref string_null string_null_p
+setref &string_null string_null
+
+var string_free 0x0
+var string_used 0x0
+
+var string_current_end 0x0
+
+
+set string_free string_begin
+set string_current_end string_begin
+
+
+
+
+proc string_new_char -> pc
+    if string_free string_null
+	set pc string_current_end
+	call inc string_current_end -> string_current_end
+	copy &string_null string_current_end	    
+	call inc string_current_end -> string_current_end
+	copy &string_null string_current_end
+	call inc string_current_end -> string_current_end
+    else
+	var next 0x0
+	setref &next next
+
+	var pcurr 0x0
+	setref &pcurr pcurr
+
+	set pcurr string_free
+	call inc pcurr -> pcurr
+	copy pcurr &next
+	
+	if next string_null
+	    set pc string_free
+	    set string_free string_null
+	    
+	    call inc pcurr -> pcurr
+	    copy &string_null pcurr
+
+	    copy &string_zero pc
+	else
+	    var next_prev 0x0
+	    setref &next_prev next_prev
+
+	    set pcurr next
+	    call inc pcurr -> pcurr
+	    call inc pcurr -> pcurr
+	    copy pcurr &next_prev
+
+	    copy &string_null next_prev
+	    set pc string_free
+	    set string_free next
+	end	
+    end
+end
+
+proc string_free_char pc
+end
+
+
+proc string_get_char pc -> v
+    setref &v v
+    copy pc &v
+end
+
+
+proc string_append_char ps pv 
+end
+
+
+proc string_cmp ps1 ps2 -> r
+end
+
+
+
+proc string_cpy ps1 ps2 
+end
+
+var a1 0x111111
+var a2 0x222222
+var a3 0x333333
+var a4 0x444444
+
+var tmp  0x0
+
+
+call stack_push a1
+call stack_push a2
+call stack_pop -> tmp
+call stack_pop -> tmp
+call stack_pop -> tmp
+call stack_pop -> tmp
+call stack_push a4
+
+
+
+
 exit
+

@@ -1,0 +1,86 @@
+var string_begin 0x7000000000
+var string_end   0x7fffffffff
+
+var string_zero 0x0
+setref &string_zero string_zero
+
+var string_null_p 0x0
+setref string_null string_null_p
+setref &string_null string_null
+
+var string_free 0x0
+var string_used 0x0
+
+var string_current_end 0x0
+
+
+set string_free string_begin
+set string_current_end string_begin
+
+
+
+
+proc string_new_char -> pc
+    if string_free string_null
+	set pc string_current_end
+	call inc string_current_end -> string_current_end
+	copy &string_null string_current_end	    
+	call inc string_current_end -> string_current_end
+	copy &string_null string_current_end
+	call inc string_current_end -> string_current_end
+    else
+	var next 0x0
+	setref &next next
+
+	var pcurr 0x0
+	setref &pcurr pcurr
+
+	set pcurr string_free
+	call inc pcurr -> pcurr
+	copy pcurr &next
+	
+	if next string_null
+	    set pc string_free
+	    set string_free string_null
+	    
+	    call inc pcurr -> pcurr
+	    copy &string_null pcurr
+
+	    copy &string_zero pc
+	else
+	    var next_prev 0x0
+	    setref &next_prev next_prev
+
+	    set pcurr next
+	    call inc pcurr -> pcurr
+	    call inc pcurr -> pcurr
+	    copy pcurr &next_prev
+
+	    copy &string_null next_prev
+	    set pc string_free
+	    set string_free next
+	end	
+    end
+end
+
+proc string_free_char pc
+end
+
+
+proc string_get_char pc -> v
+    setref &v v
+    copy pc &v
+end
+
+
+proc string_append_char ps pv 
+end
+
+
+proc string_cmp ps1 ps2 -> r
+end
+
+
+
+proc string_cpy ps1 ps2 
+end

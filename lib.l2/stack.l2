@@ -1,0 +1,44 @@
+var stack_begin 0x1000000000
+var stack_end   0x1fffffffff
+
+
+var stack_tmp 0x0
+setref &stack_tmp stack_tmp
+
+
+var sp 0x0
+setref &sp sp
+
+var stack_zero 0x0
+setref &stack_zero stack_zero
+
+
+set sp stack_begin
+
+proc stack_push A
+    if sp stack_end
+    else
+	set stack_tmp A
+	copy &stack_tmp sp
+	call inc sp -> sp    
+    end
+end
+
+proc stack_pop -> B
+    if sp stack_begin
+	set B 0x0
+    else
+	call dec sp -> sp
+	copy sp &stack_tmp
+	set B stack_tmp
+	copy &stack_zero sp
+    end
+end
+
+proc stack_empty? -> B
+    if sp stack_begin 
+	set B 0x1
+    else
+	set B 0x0
+    end
+end
