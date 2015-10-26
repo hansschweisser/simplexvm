@@ -1,2 +1,0 @@
-# simplexvm
-# outstanding project
