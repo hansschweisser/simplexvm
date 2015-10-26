@@ -1,21 +1,98 @@
-(cmd arg arg arg)
-(cmd (cmd (cmd arg arg) arg (cmd arg (cmd arg ))) arg)
+Need:
+    stack
+    list
+    array
+    struct
+    hash
+    string
+
+    functions with arguments as functions
+
+    static typing
+
+Types:
+    There are only two basic types: pointer and byte. Can be created on heap and stack. 
+    And also atoms.
 
 
-needed
-- stack
-- 
+Optymalisation:
+    list, stack and array can be represented by list with at(n) function. 
+    struct, hash can be represented by hash
+    string can be represented by list, chars as a byte
 
 
 
-in/out 
+Atoms.
+    Are converted to numbers and the name is abandoned in execution time. Sort of a define constants.
 
-in 0xff tmp
+Strings.
+    A list of bytes. Each byte is in this architecture 64bit long. What number coresponds to what ascti is up to debate. 
 
-out 0xff tmp
+List.
+    List has to be created explicitly.
+
+Hash is in fact a list.
+
+
+
+There are two designs. The executable one, in which data structures will be handled on a cpu, and the second design, a compilation design, 
+that will be implemented in an external language. 
+
+There is a need to select basic data structures that will be used for others as a core. And design an implementation for this data structures in L2 language.
+
+Basic data structures are 
+- pointer, that will point to a memory byte, will be able to move up and down in the memory.
+- byte/number, a one byte number that will be used for storing integer. Porbably used for calculation of memory address.
+- tree, a raw datastructure used for higher level datastructures like, lists and hashed. A tree has a node, which is a pair (a,b) where a is a pointer to next node, and b is a pinter to next node, or null. 
+
+-> (x,x) -> (b,null)
+    |
+    v
+   (a,null)
+
+Similar to list cons structure. 
+
+Data structures in L3 language from compiler perspective would be:
+- string : ( 1 2 3 4 5 )
+- hash : { name => value , name => { hash ....
+
+Each level has to also have a new method for validation. So there are in fact three things to design: validation, implementaion in L2 core structures and behaviour and L3 syntax with compliation methong in external lanuguage. 
+
+There will be stack and heap.
+
+Examples.
+
+
+{
+    pointer p;
+    p = alloc node;
+    free p;     
+}
+{
+    pointer p;
+    p = alloc node;
+}
+
+
+How to alloc array of n elements.
+{
+    number n = 0;
+    for(n=0;n<100;n++){
+	node_pointer p = alloc node;
+	p.first = n
+    }
+}
+
+*****p == null 
+
+pointer p = 0xfffffff;
 
 
 
 
 
 
+
+
+
+    
